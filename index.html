@@ -5,62 +5,143 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Super Secure Pro - OST Security Services</title>
   
-  <!-- Tailwind CSS -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- React & React DOM -->
+  <!-- React & React DOM CDNs -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   
-  <!-- Babel compiler to parse React JSX in the browser -->
+  <!-- Babel Compiler for JSX -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
-<body class="bg-slate-950 text-slate-100">
+<body class="bg-slate-950 text-slate-100 antialiased selection:bg-amber-500 selection:text-slate-950">
 
-  <!-- React Mount Root -->
+  <!-- React Mount Point -->
   <div id="root"></div>
 
-  <!-- React App Code -->
+  <!-- Main Application Script -->
   <script type="text/babel">
     const { useState, useRef } = React;
 
-    // SVG Icon Helper
+    // SVG Icon Helper Component
     const Icon = ({ name, className = "w-5 h-5" }) => {
       const icons = {
         shield: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>,
         home: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>,
         users: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>,
         map: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>,
-        exclamation: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+        exclamation: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>,
+        qr: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h.01M16 20h2M4 4h4v4H4V4zm12 0h4v4h-4V4zm0 12h4v4h-4v-4zM4 16h4v4H4v-4z" /></svg>,
+        cog: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
+        plus: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
       };
       return icons[name] || null;
     };
 
     function App() {
-      const initialUsers = [
-        { id: 'usr-1', name: 'Vikram Singh', role: 'admin', avatar: '🛡️' },
-        { id: 'usr-2', name: 'Rajesh Kumar', role: 'guard', avatar: '👮' },
-        { id: 'usr-3', name: 'Suresh Mehta', role: 'chairman', avatar: '👑' },
-        { id: 'usr-4', name: 'Ankita Verma', role: 'secretary', avatar: '📋' },
-        { id: 'usr-5', name: 'Praveen Nair', role: 'facility_manager', avatar: '🛠️' }
-      ];
+      // Updated Full Team Personnel Roster
+      const [users, setUsers] = useState([
+        { id: 'usr-1', name: 'Javed Shaikh', role: 'admin', title: 'System Admin', avatar: '🛡️', status: 'approved' },
+        { id: 'usr-2', name: 'Kishor Ladawte', role: 'supervisor', title: 'Security Supervisor', avatar: '👔', status: 'approved' },
+        { id: 'usr-3', name: 'Siraj Pathan', role: 'supervisor', title: '2nd Supervisor', avatar: '👔', status: 'approved' },
+        { id: 'usr-4', name: 'Raju Sonekamble', role: 'night_supervisor', title: 'Night Supervisor', avatar: '🌙', status: 'approved' },
+        { id: 'usr-5', name: 'Ravi Khandare', role: 'guard', title: 'Security Guard', avatar: '👮', status: 'approved' },
+        { id: 'usr-6', name: 'Vimal Yadav', role: 'guard', title: 'Security Guard', avatar: '👮', status: 'approved' },
+        { id: 'usr-7', name: 'Shiv Sevak Yadav', role: 'guard', title: 'Security Guard', avatar: '👮', status: 'approved' },
+        { id: 'usr-8', name: 'Swapnil Shinde', role: 'guard', title: 'Security Guard', avatar: '👮', status: 'approved' },
+        { id: 'usr-9', name: 'Suraj Pal', role: 'guard', title: 'Security Guard', avatar: '👮', status: 'approved' },
+        { id: 'usr-10', name: 'Phool Hasan', role: 'guard', title: 'Security Guard', avatar: '👮', status: 'approved' }
+      ]);
 
-      const roleLabels = {
-        guard: 'Field Guard',
-        facility_manager: 'Facility Manager',
-        secretary: 'Society Secretary',
-        chairman: 'Society Chairman',
-        admin: 'System Admin'
-      };
-
-      const [currentUser, setCurrentUser] = useState(initialUsers[0]);
+      const [currentUser, setCurrentUser] = useState(users[0]);
       const [activeTab, setActiveTab] = useState('home');
       const [sosActive, setSosActive] = useState(false);
+      const [notification, setNotification] = useState(null);
+
+      // Form States
+      const [newGuardName, setNewGuardName] = useState('');
+      const [newGuardRole, setNewGuardRole] = useState('guard');
+      const [visitorName, setVisitorName] = useState('');
+      const [visitorHost, setVisitorHost] = useState('');
+
+      const [visitors, setVisitors] = useState([
+        { id: 'vis-1', name: 'Amit Patel', company: 'Amazon', host: 'Flat 402 - Roy', inTime: '01:45 PM' },
+        { id: 'vis-2', name: 'Ramesh Sen', company: 'Urban Company', host: 'Flat 101 - Sharma', inTime: '02:10 PM' }
+      ]);
+
+      const [incidents, setIncidents] = useState([
+        { id: 'inc-1', title: 'Basement Parking Light Defect', location: 'B2 Parking', reporter: 'Raju Sonekamble', severity: 'medium', time: '02:15 AM' },
+        { id: 'inc-2', title: 'Unauthorized Parking Warning', location: 'Gate 2 Entrance', reporter: 'Ravi Khandare', severity: 'low', time: '11:30 AM' }
+      ]);
+
+      const checkpoints = [
+        'Main Entrance Gate 1',
+        'Basement 1 Parking Grid',
+        'Basement 2 Parking Grid',
+        'Clubhouse & Gym Portal',
+        'Rear Perimeter Wall Patrol',
+        'Terrace Roof Access'
+      ];
+
+      const [scannedPoints, setScannedPoints] = useState([]);
+
+      const showNotify = (msg) => {
+        setNotification(msg);
+        setTimeout(() => setNotification(null), 3000);
+      };
+
+      const handleScan = (pt) => {
+        if (scannedPoints.includes(pt)) {
+          showNotify("Checkpoint already verified!");
+          return;
+        }
+        setScannedPoints([...scannedPoints, pt]);
+        showNotify(`Scanned: ${pt}`);
+      };
+
+      const handleAddPersonnel = (e) => {
+        e.preventDefault();
+        if (!newGuardName) return;
+        const roleTitles = {
+          guard: 'Security Guard',
+          supervisor: 'Supervisor',
+          night_supervisor: 'Night Supervisor',
+          admin: 'System Admin'
+        };
+        const newUser = {
+          id: `usr-${users.length + 1}`,
+          name: newGuardName,
+          role: newGuardRole,
+          title: roleTitles[newGuardRole] || 'Security Staff',
+          avatar: newGuardRole === 'night_supervisor' ? '🌙' : newGuardRole === 'supervisor' ? '👔' : '👮',
+          status: 'approved'
+        };
+        setUsers([...users, newUser]);
+        setNewGuardName('');
+        showNotify(`Added ${newUser.name} to Roster!`);
+      };
+
+      const handleAddVisitor = (e) => {
+        e.preventDefault();
+        if (!visitorName || !visitorHost) return;
+        const newVis = {
+          id: `vis-${visitors.length + 1}`,
+          name: visitorName,
+          company: 'Personal Guest',
+          host: visitorHost,
+          inTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        setVisitors([newVis, ...visitors]);
+        setVisitorName('');
+        setVisitorHost('');
+        showNotify(`Pass issued for ${newVis.name}!`);
+      };
 
       return (
         <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row items-center justify-center p-4 gap-6 font-sans">
           
-          {/* Persona Switcher Panel */}
+          {/* Desktop Control Panel - Switch Personnel */}
           <div className="w-full md:w-80 max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-2xl space-y-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-amber-500/10 rounded-xl border border-amber-500/20 text-amber-500">
@@ -68,87 +149,253 @@
               </div>
               <div>
                 <h1 className="text-lg font-black text-white">Super Secure Pro</h1>
-                <p className="text-xs text-slate-400">OST Security Suite</p>
+                <p className="text-xs text-slate-400">OST Security Services</p>
               </div>
             </div>
 
             <div className="space-y-2">
-              <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Select Persona Role</span>
-              <div className="space-y-1.5">
-                {initialUsers.map((u) => (
+              <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Active Staff Switcher</span>
+              <div className="space-y-1.5 max-h-72 overflow-y-auto pr-1">
+                {users.map((u) => (
                   <button
                     key={u.id}
-                    onClick={() => setCurrentUser(u)}
+                    onClick={() => {
+                      setCurrentUser(u);
+                      showNotify(`Switched to ${u.name}`);
+                    }}
                     className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-left text-xs transition ${
-                      currentUser.id === u.id ? 'border-amber-500 bg-amber-500/10 text-white' : 'border-slate-800 bg-slate-950 text-slate-400'
+                      currentUser.id === u.id ? 'border-amber-500 bg-amber-500/10 text-white' : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'
                     }`}
                   >
                     <div className="flex items-center gap-2">
-                      <span>{u.avatar}</span>
+                      <span className="text-base">{u.avatar}</span>
                       <div>
                         <div className="font-bold text-white text-[11px]">{u.name}</div>
-                        <div className="text-[9px] text-slate-400">{roleLabels[u.role]}</div>
+                        <div className="text-[9px] text-slate-400">{u.title}</div>
                       </div>
                     </div>
+                    {currentUser.id === u.id && (
+                      <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                    )}
                   </button>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Mobile Screen Simulator */}
+          {/* Mobile Screen Frame */}
           <div className="relative w-full max-w-[420px] aspect-[9/19] bg-slate-950 rounded-[48px] border-[10px] border-slate-800 p-3 shadow-2xl overflow-hidden flex flex-col justify-between">
+            
+            {/* Notification Popup */}
+            {notification && (
+              <div className="absolute top-12 left-5 right-5 z-50 p-3 rounded-xl bg-slate-900 border border-amber-500/40 text-amber-300 text-xs shadow-2xl flex items-center gap-2 animate-bounce">
+                <Icon name="shield" className="w-4 h-4 flex-shrink-0" />
+                <span>{notification}</span>
+              </div>
+            )}
+
+            {/* Mobile Header Bar */}
             <div className="flex items-center justify-between text-[10px] text-slate-400 font-semibold px-6 pt-2 pb-1 select-none">
-              <span>09:41 AM</span>
-              <span className="text-[9px] bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded font-mono uppercase">
-                {roleLabels[currentUser.role]}
+              <span>OST PRO</span>
+              <span className="text-[9px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-mono uppercase">
+                {currentUser.title}
               </span>
             </div>
 
+            {/* Main Application Container */}
             <div className="flex-1 overflow-y-auto px-4 py-2 mt-1 bg-slate-900 rounded-[32px] flex flex-col justify-between">
+              
               <div>
+                {/* Active User Header */}
                 <div className="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-xl">{currentUser.avatar}</span>
+                    <span className="text-2xl">{currentUser.avatar}</span>
                     <div>
                       <h3 className="text-xs font-bold text-white">{currentUser.name}</h3>
-                      <p className="text-[9px] text-slate-400">{roleLabels[currentUser.role]}</p>
+                      <p className="text-[9px] text-slate-400">{currentUser.title}</p>
                     </div>
                   </div>
-                  <button onClick={() => setSosActive(!sosActive)} className="bg-red-600 text-white text-[9px] font-black px-2.5 py-1 rounded-full animate-pulse">
+                  <button 
+                    onClick={() => {
+                      setSosActive(!sosActive);
+                      showNotify(sosActive ? "SOS Canceled" : "EMERGENCY SOS BROADCASTED!");
+                    }} 
+                    className={`text-[9px] font-black px-2.5 py-1 rounded-full animate-pulse transition ${
+                      sosActive ? 'bg-white text-red-600' : 'bg-red-600 text-white'
+                    }`}
+                  >
                     🚨 SOS
                   </button>
                 </div>
 
-                <div className="space-y-3 text-xs">
-                  <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl">
-                    <h4 className="font-bold text-white mb-1">Active Zone: Royal Orchid Society</h4>
-                    <p className="text-[10px] text-slate-400">Security Gate 1 • Active Guards: 5</p>
+                {/* TAB 1: HOME PANEL */}
+                {activeTab === 'home' && (
+                  <div className="space-y-3">
+                    <div className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-1">
+                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded uppercase font-mono font-bold">Active Zone</span>
+                      <h4 className="font-bold text-white text-xs mt-1">OST Security Headquarters</h4>
+                      <p className="text-[10px] text-slate-400">Duty Staff On Site: {users.length} Registered</p>
+                    </div>
+
+                    {/* Quick Staff Add Form (for Admin or Supervisors) */}
+                    {(currentUser.role === 'admin' || currentUser.role === 'supervisor') && (
+                      <form onSubmit={handleAddPersonnel} className="bg-slate-950/60 p-3 border border-slate-800 rounded-xl space-y-2">
+                        <span className="text-[10px] font-bold text-amber-400 block">Add New Guard / Staff</span>
+                        <input 
+                          type="text" 
+                          placeholder="Personnel Name" 
+                          value={newGuardName} 
+                          onChange={(e) => setNewGuardName(e.target.value)}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
+                        />
+                        <div className="flex gap-2">
+                          <select 
+                            value={newGuardRole} 
+                            onChange={(e) => setNewGuardRole(e.target.value)}
+                            className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-white flex-1"
+                          >
+                            <option value="guard">Security Guard</option>
+                            <option value="supervisor">Supervisor</option>
+                            <option value="night_supervisor">Night Supervisor</option>
+                          </select>
+                          <button type="submit" className="bg-amber-500 text-slate-950 font-bold px-3 py-1 rounded-lg text-xs">
+                            Add
+                          </button>
+                        </div>
+                      </form>
+                    )}
+
+                    {/* Active Guards List */}
+                    <div className="space-y-2">
+                      <h4 className="text-xs font-bold text-white">Active Duty Staff Roster</h4>
+                      <div className="space-y-1.5 max-h-40 overflow-y-auto">
+                        {users.map((u) => (
+                          <div key={u.id} className="p-2 bg-slate-950 border border-slate-800 rounded-lg flex justify-between items-center text-xs">
+                            <div className="flex items-center gap-2">
+                              <span>{u.avatar}</span>
+                              <span className="font-medium text-white">{u.name}</span>
+                            </div>
+                            <span className="text-[9px] text-slate-400">{u.title}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {/* TAB 2: VISITORS */}
+                {activeTab === 'visitors' && (
+                  <div className="space-y-3">
+                    <form onSubmit={handleAddVisitor} className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-2">
+                      <span className="text-xs font-bold text-white block">New Visitor Entry Pass</span>
+                      <input 
+                        type="text" 
+                        placeholder="Visitor Name" 
+                        value={visitorName} 
+                        onChange={(e) => setVisitorName(e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
+                      />
+                      <input 
+                        type="text" 
+                        placeholder="Whom to Meet (Flat / Unit)" 
+                        value={visitorHost} 
+                        onChange={(e) => setVisitorHost(e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
+                      />
+                      <button type="submit" className="w-full bg-emerald-500 text-slate-950 font-bold py-1.5 rounded-lg text-xs">
+                        Generate Visitor Pass
+                      </button>
+                    </form>
+
+                    <div className="space-y-1.5">
+                      <h4 className="text-xs font-bold text-white">Current Visitors On-Site</h4>
+                      {visitors.map((v) => (
+                        <div key={v.id} className="p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs flex justify-between items-center">
+                          <div>
+                            <div className="font-bold text-white">{v.name}</div>
+                            <div className="text-[10px] text-slate-400">Host: {v.host}</div>
+                          </div>
+                          <span className="text-[9px] text-emerald-400 font-mono">In: {v.inTime}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* TAB 3: PATROL ROUTE */}
+                {activeTab === 'patrol' && (
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <h4 className="text-xs font-bold text-white">Patrol Checkpoints</h4>
+                      <span className="text-[10px] text-slate-400">{scannedPoints.length} / {checkpoints.length} Cleared</span>
+                    </div>
+
+                    <div className="space-y-2">
+                      {checkpoints.map((pt, idx) => {
+                        const isDone = scannedPoints.includes(pt);
+                        return (
+                          <button
+                            key={idx}
+                            onClick={() => handleScan(pt)}
+                            className={`w-full p-2.5 rounded-xl border text-left text-xs flex justify-between items-center transition ${
+                              isDone ? 'bg-blue-950/30 border-blue-500/50 text-blue-300' : 'bg-slate-950 border-slate-800 text-slate-300'
+                            }`}
+                          >
+                            <span>{pt}</span>
+                            <span className={`text-[9px] px-2 py-0.5 rounded font-mono ${isDone ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                              {isDone ? 'VERIFIED' : 'TAP SCAN'}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* TAB 4: INCIDENTS */}
+                {activeTab === 'incidents' && (
+                  <div className="space-y-3">
+                    <h4 className="text-xs font-bold text-white">Recent Security Logs</h4>
+                    <div className="space-y-2">
+                      {incidents.map((inc) => (
+                        <div key={inc.id} className="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs space-y-1">
+                          <div className="flex justify-between font-bold text-rose-400">
+                            <span>{inc.title}</span>
+                            <span className="text-[9px] text-slate-500">{inc.time}</span>
+                          </div>
+                          <p className="text-[10px] text-slate-400">Location: {inc.location}</p>
+                          <span className="text-[9px] text-amber-400 block">Reported by: {inc.reporter}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
               </div>
 
-              {/* Bottom Nav Bar */}
-              <div className="grid grid-cols-4 border-t border-slate-800 pt-2 text-center text-[10px] bg-slate-900">
-                <button onClick={() => setActiveTab('home')} className={activeTab === 'home' ? 'text-amber-500' : 'text-slate-500'}>
+              {/* Bottom Mobile Tab Navigation */}
+              <div className="grid grid-cols-4 border-t border-slate-800 pt-2 text-center text-[10px] bg-slate-900 mt-2">
+                <button onClick={() => setActiveTab('home')} className={activeTab === 'home' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
                   <Icon name="home" className="w-5 h-5 mx-auto" />
                   <span>Home</span>
                 </button>
-                <button onClick={() => setActiveTab('visitors')} className={activeTab === 'visitors' ? 'text-amber-500' : 'text-slate-500'}>
+                <button onClick={() => setActiveTab('visitors')} className={activeTab === 'visitors' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
                   <Icon name="users" className="w-5 h-5 mx-auto" />
                   <span>Visitors</span>
                 </button>
-                <button onClick={() => setActiveTab('patrol')} className={activeTab === 'patrol' ? 'text-amber-500' : 'text-slate-500'}>
+                <button onClick={() => setActiveTab('patrol')} className={activeTab === 'patrol' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
                   <Icon name="map" className="w-5 h-5 mx-auto" />
                   <span>Patrol</span>
                 </button>
-                <button onClick={() => setActiveTab('incidents')} className={activeTab === 'incidents' ? 'text-amber-500' : 'text-slate-500'}>
+                <button onClick={() => setActiveTab('incidents')} className={activeTab === 'incidents' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
                   <Icon name="exclamation" className="w-5 h-5 mx-auto" />
                   <span>Incidents</span>
                 </button>
               </div>
+
             </div>
 
+            {/* Mobile Bottom Gesture Handle */}
             <div className="w-28 h-1 bg-slate-800 mx-auto rounded-full mt-2"></div>
           </div>
 
@@ -156,6 +403,7 @@
       );
     }
 
+    // Mount to DOM
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
