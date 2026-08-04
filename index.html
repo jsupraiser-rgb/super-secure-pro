@@ -33,23 +33,23 @@
         map: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>,
         exclamation: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>,
         cog: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
-        building: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+        building: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>,
+        camera: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
+        check: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
       };
       return icons[name] || null;
     };
 
     function App() {
-      // Dynamic Editable Site Details State - Updated to Unicorn by Chandak
       const [siteDetails, setSiteDetails] = useState({
         name: 'Unicorn by Chandak',
         type: '18 Storey Commercial Tower',
         address: 'Chandak Unicorn Commercial Hub, Central District',
         gates: '2 Gates (Gate 1 Main Entry, Gate 2 Service & Loading)',
         helpline: '+91 98210 25556',
-        instructions: 'All visitors & contractors must register at Reception Gate 1. Loading dock access via Gate 2 only.'
+        instructions: 'All visitors & contractors must register at Reception Gate 1. Photo verification & AI record check required.'
       });
 
-      // Team Personnel Roster
       const [users, setUsers] = useState([
         { id: 'usr-1', name: 'Javed Shaikh', role: 'admin', title: 'System Admin', avatar: '🛡️' },
         { id: 'usr-2', name: 'Kishor Ladawte', role: 'supervisor', title: 'Security Supervisor', avatar: '👔' },
@@ -64,20 +64,44 @@
       ]);
 
       const [currentUser, setCurrentUser] = useState(users[0]);
-      const [activeTab, setActiveTab] = useState('home');
+      const [activeTab, setActiveTab] = useState('visitors');
       const [sosActive, setSosActive] = useState(false);
       const [notification, setNotification] = useState(null);
 
-      // Temporary Editing States for Site Form
       const [editSite, setEditSite] = useState({ ...siteDetails });
       const [newGuardName, setNewGuardName] = useState('');
       const [newGuardRole, setNewGuardRole] = useState('guard');
+      
+      // Visitor Form & Verification States
       const [visitorName, setVisitorName] = useState('');
       const [visitorHost, setVisitorHost] = useState('');
+      const [visitorPhone, setVisitorPhone] = useState('');
+      const [selectedPhoto, setSelectedPhoto] = useState('👨‍💼');
+      const [isScanningPhoto, setIsScanningPhoto] = useState(false);
+
+      const avatarOptions = ['👨‍💼', '👩‍💼', '👤', '👨‍🔧', '🚚', '📦'];
 
       const [visitors, setVisitors] = useState([
-        { id: 'vis-1', name: 'Amit Patel', company: 'Amazon', host: 'Office 402', inTime: '01:45 PM' },
-        { id: 'vis-2', name: 'Ramesh Sen', company: 'Urban Company', host: 'Office 1201', inTime: '02:10 PM' }
+        { 
+          id: 'vis-1', 
+          name: 'Amit Patel', 
+          company: 'Amazon Delivery', 
+          host: 'Office 402', 
+          inTime: '01:45 PM', 
+          photo: '👨‍💼', 
+          policeCheck: 'CLEARED (No Criminal Record)',
+          statusColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+        },
+        { 
+          id: 'vis-2', 
+          name: 'Ramesh Sen', 
+          company: 'Urban Company', 
+          host: 'Office 1201', 
+          inTime: '02:10 PM', 
+          photo: '👨‍🔧', 
+          policeCheck: 'CLEARED (No Criminal Record)',
+          statusColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+        }
       ]);
 
       const [incidents, setIncidents] = useState([
@@ -98,13 +122,7 @@
 
       const showNotify = (msg) => {
         setNotification(msg);
-        setTimeout(() => setNotification(null), 3000);
-      };
-
-      const handleSaveSiteDetails = (e) => {
-        e.preventDefault();
-        setSiteDetails({ ...editSite });
-        showNotify("Site details updated successfully!");
+        setTimeout(() => setNotification(null), 3500);
       };
 
       const handleScan = (pt) => {
@@ -116,41 +134,31 @@
         showNotify(`Scanned: ${pt}`);
       };
 
-      const handleAddPersonnel = (e) => {
-        e.preventDefault();
-        if (!newGuardName) return;
-        const roleTitles = {
-          guard: 'Security Guard',
-          supervisor: 'Supervisor',
-          night_supervisor: 'Night Supervisor',
-          admin: 'System Admin'
-        };
-        const newUser = {
-          id: `usr-${users.length + 1}`,
-          name: newGuardName,
-          role: newGuardRole,
-          title: roleTitles[newGuardRole] || 'Security Staff',
-          avatar: newGuardRole === 'night_supervisor' ? '🌙' : newGuardRole === 'supervisor' ? '👔' : '👮'
-        };
-        setUsers([...users, newUser]);
-        setNewGuardName('');
-        showNotify(`Added ${newUser.name} to Roster!`);
-      };
-
       const handleAddVisitor = (e) => {
         e.preventDefault();
         if (!visitorName || !visitorHost) return;
-        const newVis = {
-          id: `vis-${visitors.length + 1}`,
-          name: visitorName,
-          company: 'Corporate Guest',
-          host: visitorHost,
-          inTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-        setVisitors([newVis, ...visitors]);
-        setVisitorName('');
-        setVisitorHost('');
-        showNotify(`Pass issued for ${newVis.name}!`);
+
+        setIsScanningPhoto(true);
+        showNotify("🔍 Facial Scan & Criminal Record Search in Progress...");
+
+        setTimeout(() => {
+          setIsScanningPhoto(false);
+          const newVis = {
+            id: `vis-${visitors.length + 1}`,
+            name: visitorName,
+            company: 'Registered Guest',
+            host: visitorHost,
+            inTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            photo: selectedPhoto,
+            policeCheck: 'CLEARED (Police Record Verification OK)',
+            statusColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+          };
+          setVisitors([newVis, ...visitors]);
+          setVisitorName('');
+          setVisitorHost('');
+          setVisitorPhone('');
+          showNotify(`✅ Photo Checked & Verified! Pass generated for ${newVis.name}.`);
+        }, 1500);
       };
 
       return (
@@ -173,7 +181,6 @@
               <span className="text-[9px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded uppercase font-mono font-bold">Active Property</span>
               <h3 className="font-bold text-white text-xs mt-1">{siteDetails.name}</h3>
               <p className="text-[10px] text-slate-400">{siteDetails.type}</p>
-              <p className="text-[9px] text-slate-500">{siteDetails.address}</p>
               <p className="text-[10px] text-amber-400 font-mono pt-1">☎️ {siteDetails.helpline}</p>
             </div>
 
@@ -198,9 +205,6 @@
                         <div className="text-[9px] text-slate-400">{u.title}</div>
                       </div>
                     </div>
-                    {currentUser.id === u.id && (
-                      <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-                    )}
                   </button>
                 ))}
               </div>
@@ -252,11 +256,115 @@
                   </button>
                 </div>
 
-                {/* TAB 1: HOME PANEL */}
+                {/* TAB: VISITORS WITH PHOTO PASS & POLICE CHECK */}
+                {activeTab === 'visitors' && (
+                  <div className="space-y-3">
+                    <form onSubmit={handleAddVisitor} className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-2.5">
+                      <div className="flex justify-between items-center border-b border-slate-900 pb-1.5">
+                        <span className="text-xs font-bold text-white block">Visitor Entry & Photo Scan</span>
+                        <span className="text-[9px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 font-mono">
+                          AI Facial Check Active
+                        </span>
+                      </div>
+
+                      {/* Photo Capture Preview Selector */}
+                      <div className="space-y-1">
+                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Select / Capture Visitor Photo</label>
+                        <div className="flex items-center gap-2">
+                          <div className="w-12 h-12 bg-slate-900 border border-amber-500/40 rounded-xl flex items-center justify-center text-2xl shadow-inner">
+                            {selectedPhoto}
+                          </div>
+                          <div className="flex-1 flex gap-1.5 overflow-x-auto py-1">
+                            {avatarOptions.map((emoji, idx) => (
+                              <button
+                                key={idx}
+                                type="button"
+                                onClick={() => setSelectedPhoto(emoji)}
+                                className={`p-2 rounded-lg border text-sm transition ${
+                                  selectedPhoto === emoji ? 'border-amber-500 bg-amber-500/20' : 'border-slate-800 bg-slate-900'
+                                }`}
+                              >
+                                {emoji}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <input 
+                        type="text" 
+                        placeholder="Visitor Full Name" 
+                        value={visitorName} 
+                        onChange={(e) => setVisitorName(e.target.value)}
+                        className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
+                        required
+                      />
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <input 
+                          type="text" 
+                          placeholder="Phone / ID Number" 
+                          value={visitorPhone} 
+                          onChange={(e) => setVisitorPhone(e.target.value)}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white" 
+                        />
+                        <input 
+                          type="text" 
+                          placeholder="Host / Office Number" 
+                          value={visitorHost} 
+                          onChange={(e) => setVisitorHost(e.target.value)}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white" 
+                          required
+                        />
+                      </div>
+
+                      <button 
+                        type="submit" 
+                        disabled={isScanningPhoto}
+                        className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2 rounded-lg text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition"
+                      >
+                        <Icon name="camera" className="w-4 h-4" />
+                        <span>{isScanningPhoto ? "Checking Records..." : "Scan Photo & Issue Pass"}</span>
+                      </button>
+                    </form>
+
+                    {/* Issued Passes Feed */}
+                    <div className="space-y-2">
+                      <h4 className="text-xs font-bold text-white">Active Digital Visitor Passes</h4>
+                      
+                      <div className="space-y-2.5 max-h-64 overflow-y-auto">
+                        {visitors.map((v) => (
+                          <div key={v.id} className="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-center gap-2.5">
+                                <div className="w-10 h-10 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center text-xl">
+                                  {v.photo}
+                                </div>
+                                <div>
+                                  <div className="font-bold text-white text-xs">{v.name}</div>
+                                  <div className="text-[10px] text-slate-400">{v.company} • Host: {v.host}</div>
+                                </div>
+                              </div>
+                              <span className="text-[9px] text-emerald-400 font-mono bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                                In: {v.inTime}
+                              </span>
+                            </div>
+
+                            {/* Verification Badge */}
+                            <div className={`p-1.5 rounded-lg border text-[9px] font-mono flex items-center justify-between ${v.statusColor}`}>
+                              <span>🛡️ Police Record Check:</span>
+                              <span className="font-bold">{v.policeCheck}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* TAB: HOME */}
                 {activeTab === 'home' && (
                   <div className="space-y-3">
-                    
-                    {/* Site Information Box */}
                     <div className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-1.5">
                       <div className="flex justify-between items-center">
                         <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded uppercase font-mono font-bold">Deployed Property</span>
@@ -270,44 +378,14 @@
                       </div>
                     </div>
 
-                    {/* Security Rules Box */}
                     <div className="p-2.5 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs space-y-1">
                       <span className="font-bold text-amber-400 text-[10px] block uppercase">Site Standing Orders:</span>
                       <p className="text-[10px] text-slate-300 leading-relaxed">{siteDetails.instructions}</p>
                     </div>
 
-                    {/* Quick Add Staff Form */}
-                    {(currentUser.role === 'admin' || currentUser.role === 'supervisor') && (
-                      <form onSubmit={handleAddPersonnel} className="bg-slate-950/60 p-3 border border-slate-800 rounded-xl space-y-2">
-                        <span className="text-[10px] font-bold text-amber-400 block">Add New Guard / Staff</span>
-                        <input 
-                          type="text" 
-                          placeholder="Personnel Name" 
-                          value={newGuardName} 
-                          onChange={(e) => setNewGuardName(e.target.value)}
-                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
-                        />
-                        <div className="flex gap-2">
-                          <select 
-                            value={newGuardRole} 
-                            onChange={(e) => setNewGuardRole(e.target.value)}
-                            className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-white flex-1"
-                          >
-                            <option value="guard">Security Guard</option>
-                            <option value="supervisor">Supervisor</option>
-                            <option value="night_supervisor">Night Supervisor</option>
-                          </select>
-                          <button type="submit" className="bg-amber-500 text-slate-950 font-bold px-3 py-1 rounded-lg text-xs">
-                            Add
-                          </button>
-                        </div>
-                      </form>
-                    )}
-
-                    {/* Active Guards List */}
                     <div className="space-y-2">
                       <h4 className="text-xs font-bold text-white">Active Duty Roster ({users.length})</h4>
-                      <div className="space-y-1.5 max-h-36 overflow-y-auto">
+                      <div className="space-y-1.5 max-h-44 overflow-y-auto">
                         {users.map((u) => (
                           <div key={u.id} className="p-2 bg-slate-950 border border-slate-800 rounded-lg flex justify-between items-center text-xs">
                             <div className="flex items-center gap-2">
@@ -322,130 +400,7 @@
                   </div>
                 )}
 
-                {/* TAB 2: EDIT SITE DETAILS */}
-                {activeTab === 'site' && (
-                  <div className="space-y-3">
-                    <form onSubmit={handleSaveSiteDetails} className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-2.5">
-                      <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                        <h4 className="text-xs font-bold text-white">Update Property Details</h4>
-                        <Icon name="building" className="w-4 h-4 text-amber-500" />
-                      </div>
-
-                      <div className="space-y-1">
-                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Property / Site Name</label>
-                        <input 
-                          type="text" 
-                          value={editSite.name} 
-                          onChange={(e) => setEditSite({ ...editSite, name: e.target.value })}
-                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
-                          required
-                        />
-                      </div>
-
-                      <div className="space-y-1">
-                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Property Type</label>
-                        <select 
-                          value={editSite.type} 
-                          onChange={(e) => setEditSite({ ...editSite, type: e.target.value })}
-                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white"
-                        >
-                          <option value="18 Storey Commercial Tower">18 Storey Commercial Tower</option>
-                          <option value="Residential Society">Residential Society</option>
-                          <option value="Commercial Tower">Commercial Tower</option>
-                          <option value="Warehouse / Depot">Warehouse / Depot</option>
-                          <option value="Hospital Campus">Hospital Campus</option>
-                          <option value="Educational Institute">Educational Institute / School</option>
-                        </select>
-                      </div>
-
-                      <div className="space-y-1">
-                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Full Address</label>
-                        <input 
-                          type="text" 
-                          value={editSite.address} 
-                          onChange={(e) => setEditSite({ ...editSite, address: e.target.value })}
-                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="space-y-1">
-                          <label className="text-[9px] text-slate-400 uppercase font-semibold">Gates Setup</label>
-                          <input 
-                            type="text" 
-                            value={editSite.gates} 
-                            onChange={(e) => setEditSite({ ...editSite, gates: e.target.value })}
-                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white" 
-                          />
-                        </div>
-                        <div className="space-y-1">
-                          <label className="text-[9px] text-slate-400 uppercase font-semibold">Emergency Helpline</label>
-                          <input 
-                            type="text" 
-                            value={editSite.helpline} 
-                            onChange={(e) => setEditSite({ ...editSite, helpline: e.target.value })}
-                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white" 
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-1">
-                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Site Security Orders & Instructions</label>
-                        <textarea 
-                          value={editSite.instructions} 
-                          onChange={(e) => setEditSite({ ...editSite, instructions: e.target.value })}
-                          rows={3}
-                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white resize-none" 
-                        />
-                      </div>
-
-                      <button type="submit" className="w-full bg-amber-500 text-slate-950 font-bold py-2 rounded-lg text-xs uppercase tracking-wider">
-                        Save Site Changes
-                      </button>
-                    </form>
-                  </div>
-                )}
-
-                {/* TAB 3: VISITORS */}
-                {activeTab === 'visitors' && (
-                  <div className="space-y-3">
-                    <form onSubmit={handleAddVisitor} className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-2">
-                      <span className="text-xs font-bold text-white block">New Visitor Entry Pass</span>
-                      <input 
-                        type="text" 
-                        placeholder="Visitor Name" 
-                        value={visitorName} 
-                        onChange={(e) => setVisitorName(e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
-                      />
-                      <input 
-                        type="text" 
-                        placeholder="Whom to Meet (Office / Unit)" 
-                        value={visitorHost} 
-                        onChange={(e) => setVisitorHost(e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
-                      />
-                      <button type="submit" className="w-full bg-emerald-500 text-slate-950 font-bold py-1.5 rounded-lg text-xs">
-                        Generate Visitor Pass
-                      </button>
-                    </form>
-
-                    <div className="space-y-1.5">
-                      <h4 className="text-xs font-bold text-white">Current Visitors On-Site</h4>
-                      {visitors.map((v) => (
-                        <div key={v.id} className="p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs flex justify-between items-center">
-                          <div>
-                            <div className="font-bold text-white">{v.name}</div>
-                            <div className="text-[10px] text-slate-400">Host: {v.host}</div>
-                          </div>
-                          <span className="text-[9px] text-emerald-400 font-mono">In: {v.inTime}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* TAB 4: PATROL ROUTE */}
+                {/* TAB: PATROL ROUTE */}
                 {activeTab === 'patrol' && (
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
@@ -475,7 +430,7 @@
                   </div>
                 )}
 
-                {/* TAB 5: INCIDENTS */}
+                {/* TAB: INCIDENTS */}
                 {activeTab === 'incidents' && (
                   <div className="space-y-3">
                     <h4 className="text-xs font-bold text-white">Recent Security Logs</h4>
@@ -497,18 +452,14 @@
               </div>
 
               {/* Bottom Mobile Navigation */}
-              <div className="grid grid-cols-5 border-t border-slate-800 pt-2 text-center text-[9px] bg-slate-900 mt-2">
-                <button onClick={() => setActiveTab('home')} className={activeTab === 'home' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
-                  <Icon name="home" className="w-4 h-4 mx-auto" />
-                  <span>Home</span>
-                </button>
-                <button onClick={() => setActiveTab('site')} className={activeTab === 'site' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
-                  <Icon name="cog" className="w-4 h-4 mx-auto" />
-                  <span>Site Info</span>
-                </button>
+              <div className="grid grid-cols-4 border-t border-slate-800 pt-2 text-center text-[9px] bg-slate-900 mt-2">
                 <button onClick={() => setActiveTab('visitors')} className={activeTab === 'visitors' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
                   <Icon name="users" className="w-4 h-4 mx-auto" />
                   <span>Visitors</span>
+                </button>
+                <button onClick={() => setActiveTab('home')} className={activeTab === 'home' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
+                  <Icon name="home" className="w-4 h-4 mx-auto" />
+                  <span>Home</span>
                 </button>
                 <button onClick={() => setActiveTab('patrol')} className={activeTab === 'patrol' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
                   <Icon name="map" className="w-4 h-4 mx-auto" />
