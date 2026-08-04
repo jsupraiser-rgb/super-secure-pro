@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Super Secure Pro - OST Security Services</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- React & React DOM -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  
+  <!-- Babel compiler to parse React JSX in the browser -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-slate-950 text-slate-100">
+
+  <!-- React Mount Root -->
+  <div id="root"></div>
+
+  <!-- React App Code -->
+  <script type="text/babel">
+    const { useState, useRef } = React;
+
+    // SVG Icon Helper
+    const Icon = ({ name, className = "w-5 h-5" }) => {
+      const icons = {
+        shield: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>,
+        home: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>,
+        users: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>,
+        map: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>,
+        exclamation: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+      };
+      return icons[name] || null;
+    };
+
+    function App() {
+      const initialUsers = [
+        { id: 'usr-1', name: 'Vikram Singh', role: 'admin', avatar: '🛡️' },
+        { id: 'usr-2', name: 'Rajesh Kumar', role: 'guard', avatar: '👮' },
+        { id: 'usr-3', name: 'Suresh Mehta', role: 'chairman', avatar: '👑' },
+        { id: 'usr-4', name: 'Ankita Verma', role: 'secretary', avatar: '📋' },
+        { id: 'usr-5', name: 'Praveen Nair', role: 'facility_manager', avatar: '🛠️' }
+      ];
+
+      const roleLabels = {
+        guard: 'Field Guard',
+        facility_manager: 'Facility Manager',
+        secretary: 'Society Secretary',
+        chairman: 'Society Chairman',
+        admin: 'System Admin'
+      };
+
+      const [currentUser, setCurrentUser] = useState(initialUsers[0]);
+      const [activeTab, setActiveTab] = useState('home');
+      const [sosActive, setSosActive] = useState(false);
+
+      return (
+        <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row items-center justify-center p-4 gap-6 font-sans">
+          
+          {/* Persona Switcher Panel */}
+          <div className="w-full md:w-80 max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-amber-500/10 rounded-xl border border-amber-500/20 text-amber-500">
+                <Icon name="shield" className="w-7 h-7" />
+              </div>
+              <div>
+                <h1 className="text-lg font-black text-white">Super Secure Pro</h1>
+                <p className="text-xs text-slate-400">OST Security Suite</p>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Select Persona Role</span>
+              <div className="space-y-1.5">
+                {initialUsers.map((u) => (
+                  <button
+                    key={u.id}
+                    onClick={() => setCurrentUser(u)}
+                    className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-left text-xs transition ${
+                      currentUser.id === u.id ? 'border-amber-500 bg-amber-500/10 text-white' : 'border-slate-800 bg-slate-950 text-slate-400'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span>{u.avatar}</span>
+                      <div>
+                        <div className="font-bold text-white text-[11px]">{u.name}</div>
+                        <div className="text-[9px] text-slate-400">{roleLabels[u.role]}</div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Screen Simulator */}
+          <div className="relative w-full max-w-[420px] aspect-[9/19] bg-slate-950 rounded-[48px] border-[10px] border-slate-800 p-3 shadow-2xl overflow-hidden flex flex-col justify-between">
+            <div className="flex items-center justify-between text-[10px] text-slate-400 font-semibold px-6 pt-2 pb-1 select-none">
+              <span>09:41 AM</span>
+              <span className="text-[9px] bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded font-mono uppercase">
+                {roleLabels[currentUser.role]}
+              </span>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-4 py-2 mt-1 bg-slate-900 rounded-[32px] flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{currentUser.avatar}</span>
+                    <div>
+                      <h3 className="text-xs font-bold text-white">{currentUser.name}</h3>
+                      <p className="text-[9px] text-slate-400">{roleLabels[currentUser.role]}</p>
+                    </div>
+                  </div>
+                  <button onClick={() => setSosActive(!sosActive)} className="bg-red-600 text-white text-[9px] font-black px-2.5 py-1 rounded-full animate-pulse">
+                    🚨 SOS
+                  </button>
+                </div>
+
+                <div className="space-y-3 text-xs">
+                  <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl">
+                    <h4 className="font-bold text-white mb-1">Active Zone: Royal Orchid Society</h4>
+                    <p className="text-[10px] text-slate-400">Security Gate 1 • Active Guards: 5</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Nav Bar */}
+              <div className="grid grid-cols-4 border-t border-slate-800 pt-2 text-center text-[10px] bg-slate-900">
+                <button onClick={() => setActiveTab('home')} className={activeTab === 'home' ? 'text-amber-500' : 'text-slate-500'}>
+                  <Icon name="home" className="w-5 h-5 mx-auto" />
+                  <span>Home</span>
+                </button>
+                <button onClick={() => setActiveTab('visitors')} className={activeTab === 'visitors' ? 'text-amber-500' : 'text-slate-500'}>
+                  <Icon name="users" className="w-5 h-5 mx-auto" />
+                  <span>Visitors</span>
+                </button>
+                <button onClick={() => setActiveTab('patrol')} className={activeTab === 'patrol' ? 'text-amber-500' : 'text-slate-500'}>
+                  <Icon name="map" className="w-5 h-5 mx-auto" />
+                  <span>Patrol</span>
+                </button>
+                <button onClick={() => setActiveTab('incidents')} className={activeTab === 'incidents' ? 'text-amber-500' : 'text-slate-500'}>
+                  <Icon name="exclamation" className="w-5 h-5 mx-auto" />
+                  <span>Incidents</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="w-28 h-1 bg-slate-800 mx-auto rounded-full mt-2"></div>
+          </div>
+
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
