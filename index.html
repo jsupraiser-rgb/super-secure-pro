@@ -39,14 +39,14 @@
     };
 
     function App() {
-      // Dynamic Editable Site Details State
+      // Dynamic Editable Site Details State - Updated to Unicorn by Chandak
       const [siteDetails, setSiteDetails] = useState({
-        name: 'Royal Orchid Housing Society',
-        type: 'Residential Society',
-        address: 'Sector 14, Plot 88, Central Palm Avenue',
-        gates: '3 Gates (Gate 1 Main, Gate 2 Service, Gate 3 Emergency)',
-        helpline: '+91 98765 00000',
-        instructions: 'All delivery drivers must present digital OTP pass at Gate 1. Overnight visitor parking requires supervisor sign-off.'
+        name: 'Unicorn by Chandak',
+        type: '18 Storey Commercial Tower',
+        address: 'Chandak Unicorn Commercial Hub, Central District',
+        gates: '2 Gates (Gate 1 Main Entry, Gate 2 Service & Loading)',
+        helpline: '+91 98210 25556',
+        instructions: 'All visitors & contractors must register at Reception Gate 1. Loading dock access via Gate 2 only.'
       });
 
       // Team Personnel Roster
@@ -76,22 +76,22 @@
       const [visitorHost, setVisitorHost] = useState('');
 
       const [visitors, setVisitors] = useState([
-        { id: 'vis-1', name: 'Amit Patel', company: 'Amazon', host: 'Flat 402', inTime: '01:45 PM' },
-        { id: 'vis-2', name: 'Ramesh Sen', company: 'Urban Company', host: 'Flat 101', inTime: '02:10 PM' }
+        { id: 'vis-1', name: 'Amit Patel', company: 'Amazon', host: 'Office 402', inTime: '01:45 PM' },
+        { id: 'vis-2', name: 'Ramesh Sen', company: 'Urban Company', host: 'Office 1201', inTime: '02:10 PM' }
       ]);
 
       const [incidents, setIncidents] = useState([
-        { id: 'inc-1', title: 'Basement Light Defect', location: 'B2 Parking', reporter: 'Raju Sonekamble', severity: 'medium', time: '02:15 AM' },
-        { id: 'inc-2', title: 'Unauthorized Parking', location: 'Gate 2', reporter: 'Ravi Khandare', severity: 'low', time: '11:30 AM' }
+        { id: 'inc-1', title: 'Basement Parking Light Defect', location: 'B2 Parking', reporter: 'Raju Sonekamble', severity: 'medium', time: '02:15 AM' },
+        { id: 'inc-2', title: 'Unauthorized Parking Warning', location: 'Gate 2 Entrance', reporter: 'Ravi Khandare', severity: 'low', time: '11:30 AM' }
       ]);
 
       const checkpoints = [
-        'Main Entrance Gate 1',
+        'Main Reception Gate 1',
+        'Loading Dock Gate 2',
         'Basement 1 Parking Grid',
-        'Basement 2 Parking Grid',
-        'Clubhouse & Gym Portal',
-        'Rear Perimeter Wall Patrol',
-        'Terrace Roof Access'
+        'Server Room Level 4',
+        'High-Speed Elevator Lobby',
+        'Terrace & Refuge Area (18th Floor)'
       ];
 
       const [scannedPoints, setScannedPoints] = useState([]);
@@ -143,7 +143,7 @@
         const newVis = {
           id: `vis-${visitors.length + 1}`,
           name: visitorName,
-          company: 'Personal Guest',
+          company: 'Corporate Guest',
           host: visitorHost,
           inTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
@@ -174,6 +174,7 @@
               <h3 className="font-bold text-white text-xs mt-1">{siteDetails.name}</h3>
               <p className="text-[10px] text-slate-400">{siteDetails.type}</p>
               <p className="text-[9px] text-slate-500">{siteDetails.address}</p>
+              <p className="text-[10px] text-amber-400 font-mono pt-1">☎️ {siteDetails.helpline}</p>
             </div>
 
             <div className="space-y-2">
@@ -348,6 +349,7 @@
                           onChange={(e) => setEditSite({ ...editSite, type: e.target.value })}
                           className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white"
                         >
+                          <option value="18 Storey Commercial Tower">18 Storey Commercial Tower</option>
                           <option value="Residential Society">Residential Society</option>
                           <option value="Commercial Tower">Commercial Tower</option>
                           <option value="Warehouse / Depot">Warehouse / Depot</option>
@@ -418,7 +420,7 @@
                       />
                       <input 
                         type="text" 
-                        placeholder="Whom to Meet (Flat / Unit)" 
+                        placeholder="Whom to Meet (Office / Unit)" 
                         value={visitorHost} 
                         onChange={(e) => setVisitorHost(e.target.value)}
                         className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
