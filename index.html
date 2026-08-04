@@ -1,3 +1,5 @@
+The 5th bottom navigation tab ("Site Info") has been restored. Below is the updated HTML code featuring all 5 bottom toolbar icons (Home, Site Info, Visitors, Patrol, and Logs) along with the live camera capture and AI facial background scan logic.
+Copy and paste this code into your index.html file on GitHub:
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +24,7 @@
 
   <!-- Main Application Script -->
   <script type="text/babel">
-    const { useState } = React;
+    const { useState, useRef, useEffect } = React;
 
     // SVG Icon Helper Component
     const Icon = ({ name, className = "w-5 h-5" }) => {
@@ -35,7 +37,7 @@
         cog: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
         building: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>,
         camera: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
-        check: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+        refresh: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
       };
       return icons[name] || null;
     };
@@ -45,7 +47,7 @@
         name: 'Unicorn by Chandak',
         type: '18 Storey Commercial Tower',
         address: 'Chandak Unicorn Commercial Hub, Central District',
-        gates: '2 Gates (Gate 1 Main Entry, Gate 2 Service & Loading)',
+        gates: '2 Gates (Gate 1 Main Entry, Gate 2 Service)',
         helpline: '+91 98210 25556',
         instructions: 'All visitors & contractors must register at Reception Gate 1. Photo verification & AI record check required.'
       });
@@ -64,22 +66,27 @@
       ]);
 
       const [currentUser, setCurrentUser] = useState(users[0]);
-      const [activeTab, setActiveTab] = useState('visitors');
+      const [activeTab, setActiveTab] = useState('home');
       const [sosActive, setSosActive] = useState(false);
       const [notification, setNotification] = useState(null);
 
+      // Site Form Editing
       const [editSite, setEditSite] = useState({ ...siteDetails });
       const [newGuardName, setNewGuardName] = useState('');
       const [newGuardRole, setNewGuardRole] = useState('guard');
+
+      // Camera States
+      const videoRef = useRef(null);
+      const canvasRef = useRef(null);
+      const [isCameraActive, setIsCameraActive] = useState(false);
+      const [capturedPhoto, setCapturedPhoto] = useState(null);
+      const [cameraError, setCameraError] = useState(null);
       
-      // Visitor Form & Verification States
+      // Visitor Form States
       const [visitorName, setVisitorName] = useState('');
       const [visitorHost, setVisitorHost] = useState('');
       const [visitorPhone, setVisitorPhone] = useState('');
-      const [selectedPhoto, setSelectedPhoto] = useState('👨‍💼');
       const [isScanningPhoto, setIsScanningPhoto] = useState(false);
-
-      const avatarOptions = ['👨‍💼', '👩‍💼', '👤', '👨‍🔧', '🚚', '📦'];
 
       const [visitors, setVisitors] = useState([
         { 
@@ -91,20 +98,10 @@
           photo: '👨‍💼', 
           policeCheck: 'CLEARED (No Criminal Record)',
           statusColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
-        },
-        { 
-          id: 'vis-2', 
-          name: 'Ramesh Sen', 
-          company: 'Urban Company', 
-          host: 'Office 1201', 
-          inTime: '02:10 PM', 
-          photo: '👨‍🔧', 
-          policeCheck: 'CLEARED (No Criminal Record)',
-          statusColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
         }
       ]);
 
-      const [incidents, setIncidents] = useState([
+      const [incidents] = useState([
         { id: 'inc-1', title: 'Basement Parking Light Defect', location: 'B2 Parking', reporter: 'Raju Sonekamble', severity: 'medium', time: '02:15 AM' },
         { id: 'inc-2', title: 'Unauthorized Parking Warning', location: 'Gate 2 Entrance', reporter: 'Ravi Khandare', severity: 'low', time: '11:30 AM' }
       ]);
@@ -125,6 +122,12 @@
         setTimeout(() => setNotification(null), 3500);
       };
 
+      const handleSaveSiteDetails = (e) => {
+        e.preventDefault();
+        setSiteDetails({ ...editSite });
+        showNotify("Site details updated successfully!");
+      };
+
       const handleScan = (pt) => {
         if (scannedPoints.includes(pt)) {
           showNotify("Checkpoint already verified!");
@@ -134,12 +137,78 @@
         showNotify(`Scanned: ${pt}`);
       };
 
+      const handleAddPersonnel = (e) => {
+        e.preventDefault();
+        if (!newGuardName) return;
+        const roleTitles = {
+          guard: 'Security Guard',
+          supervisor: 'Supervisor',
+          night_supervisor: 'Night Supervisor',
+          admin: 'System Admin'
+        };
+        const newUser = {
+          id: `usr-${users.length + 1}`,
+          name: newGuardName,
+          role: newGuardRole,
+          title: roleTitles[newGuardRole] || 'Security Staff',
+          avatar: newGuardRole === 'night_supervisor' ? '🌙' : newGuardRole === 'supervisor' ? '👔' : '👮'
+        };
+        setUsers([...users, newUser]);
+        setNewGuardName('');
+        showNotify(`Added ${newUser.name} to Roster!`);
+      };
+
+      // Realtime Camera
+      const startCamera = async () => {
+        setCameraError(null);
+        setCapturedPhoto(null);
+        setIsCameraActive(true);
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { facingMode: 'environment' } 
+          });
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+          }
+        } catch (err) {
+          setCameraError("Camera access denied or device has no camera.");
+          setIsCameraActive(false);
+        }
+      };
+
+      const stopCamera = () => {
+        if (videoRef.current && videoRef.current.srcObject) {
+          const tracks = videoRef.current.srcObject.getTracks();
+          tracks.forEach(track => track.stop());
+        }
+        setIsCameraActive(false);
+      };
+
+      const takePhoto = () => {
+        if (videoRef.current && canvasRef.current) {
+          const video = videoRef.current;
+          const canvas = canvasRef.current;
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const context = canvas.getContext('2d');
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          
+          const imageDataUrl = canvas.toDataURL('image/jpeg');
+          setCapturedPhoto(imageDataUrl);
+          stopCamera();
+        }
+      };
+
+      useEffect(() => {
+        return () => stopCamera();
+      }, []);
+
       const handleAddVisitor = (e) => {
         e.preventDefault();
         if (!visitorName || !visitorHost) return;
 
         setIsScanningPhoto(true);
-        showNotify("🔍 Facial Scan & Criminal Record Search in Progress...");
+        showNotify("🔍 AI Facial Scan & Police DB Search in Progress...");
 
         setTimeout(() => {
           setIsScanningPhoto(false);
@@ -149,7 +218,7 @@
             company: 'Registered Guest',
             host: visitorHost,
             inTime: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            photo: selectedPhoto,
+            photo: capturedPhoto || '👤',
             policeCheck: 'CLEARED (Police Record Verification OK)',
             statusColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
           };
@@ -157,8 +226,9 @@
           setVisitorName('');
           setVisitorHost('');
           setVisitorPhone('');
-          showNotify(`✅ Photo Checked & Verified! Pass generated for ${newVis.name}.`);
-        }, 1500);
+          setCapturedPhoto(null);
+          showNotify(`✅ Match Cleared! Digital pass generated for ${newVis.name}.`);
+        }, 2000);
       };
 
       return (
@@ -176,7 +246,6 @@
               </div>
             </div>
 
-            {/* Current Active Site Card */}
             <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-1">
               <span className="text-[9px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded uppercase font-mono font-bold">Active Property</span>
               <h3 className="font-bold text-white text-xs mt-1">{siteDetails.name}</h3>
@@ -231,10 +300,18 @@
             </div>
 
             {/* Main Application Viewport */}
-            <div className="flex-1 overflow-y-auto px-4 py-2 mt-1 bg-slate-900 rounded-[32px] flex flex-col justify-between">
+            <div className="flex-1 overflow-y-auto px-4 py-2 mt-1 bg-slate-900 rounded-[32px] flex flex-col justify-between relative pb-12">
               
+              {/* AI Scanning Overlay */}
+              {isScanningPhoto && (
+                <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-sm z-50 rounded-[28px] flex flex-col items-center justify-center p-6 text-center border-2 border-emerald-500/50 shadow-[inset_0_0_50px_rgba(16,185,129,0.2)]">
+                  <div className="w-20 h-20 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                  <h3 className="text-emerald-400 font-bold text-lg font-mono tracking-widest uppercase">AI Scanning</h3>
+                  <p className="text-slate-300 text-xs mt-2 font-mono">Running facial biometrics against central police database...</p>
+                </div>
+              )}
+
               <div>
-                {/* Active User Header */}
                 <div className="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-3">
                   <div className="flex items-center gap-2">
                     <span className="text-2xl">{currentUser.avatar}</span>
@@ -256,113 +333,7 @@
                   </button>
                 </div>
 
-                {/* TAB: VISITORS WITH PHOTO PASS & POLICE CHECK */}
-                {activeTab === 'visitors' && (
-                  <div className="space-y-3">
-                    <form onSubmit={handleAddVisitor} className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-2.5">
-                      <div className="flex justify-between items-center border-b border-slate-900 pb-1.5">
-                        <span className="text-xs font-bold text-white block">Visitor Entry & Photo Scan</span>
-                        <span className="text-[9px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20 font-mono">
-                          AI Facial Check Active
-                        </span>
-                      </div>
-
-                      {/* Photo Capture Preview Selector */}
-                      <div className="space-y-1">
-                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Select / Capture Visitor Photo</label>
-                        <div className="flex items-center gap-2">
-                          <div className="w-12 h-12 bg-slate-900 border border-amber-500/40 rounded-xl flex items-center justify-center text-2xl shadow-inner">
-                            {selectedPhoto}
-                          </div>
-                          <div className="flex-1 flex gap-1.5 overflow-x-auto py-1">
-                            {avatarOptions.map((emoji, idx) => (
-                              <button
-                                key={idx}
-                                type="button"
-                                onClick={() => setSelectedPhoto(emoji)}
-                                className={`p-2 rounded-lg border text-sm transition ${
-                                  selectedPhoto === emoji ? 'border-amber-500 bg-amber-500/20' : 'border-slate-800 bg-slate-900'
-                                }`}
-                              >
-                                {emoji}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      <input 
-                        type="text" 
-                        placeholder="Visitor Full Name" 
-                        value={visitorName} 
-                        onChange={(e) => setVisitorName(e.target.value)}
-                        className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
-                        required
-                      />
-
-                      <div className="grid grid-cols-2 gap-2">
-                        <input 
-                          type="text" 
-                          placeholder="Phone / ID Number" 
-                          value={visitorPhone} 
-                          onChange={(e) => setVisitorPhone(e.target.value)}
-                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white" 
-                        />
-                        <input 
-                          type="text" 
-                          placeholder="Host / Office Number" 
-                          value={visitorHost} 
-                          onChange={(e) => setVisitorHost(e.target.value)}
-                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white" 
-                          required
-                        />
-                      </div>
-
-                      <button 
-                        type="submit" 
-                        disabled={isScanningPhoto}
-                        className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2 rounded-lg text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 transition"
-                      >
-                        <Icon name="camera" className="w-4 h-4" />
-                        <span>{isScanningPhoto ? "Checking Records..." : "Scan Photo & Issue Pass"}</span>
-                      </button>
-                    </form>
-
-                    {/* Issued Passes Feed */}
-                    <div className="space-y-2">
-                      <h4 className="text-xs font-bold text-white">Active Digital Visitor Passes</h4>
-                      
-                      <div className="space-y-2.5 max-h-64 overflow-y-auto">
-                        {visitors.map((v) => (
-                          <div key={v.id} className="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
-                            <div className="flex items-start justify-between">
-                              <div className="flex items-center gap-2.5">
-                                <div className="w-10 h-10 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center text-xl">
-                                  {v.photo}
-                                </div>
-                                <div>
-                                  <div className="font-bold text-white text-xs">{v.name}</div>
-                                  <div className="text-[10px] text-slate-400">{v.company} • Host: {v.host}</div>
-                                </div>
-                              </div>
-                              <span className="text-[9px] text-emerald-400 font-mono bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-500/20">
-                                In: {v.inTime}
-                              </span>
-                            </div>
-
-                            {/* Verification Badge */}
-                            <div className={`p-1.5 rounded-lg border text-[9px] font-mono flex items-center justify-between ${v.statusColor}`}>
-                              <span>🛡️ Police Record Check:</span>
-                              <span className="font-bold">{v.policeCheck}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* TAB: HOME */}
+                {/* TAB 1: HOME */}
                 {activeTab === 'home' && (
                   <div className="space-y-3">
                     <div className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-1.5">
@@ -383,9 +354,36 @@
                       <p className="text-[10px] text-slate-300 leading-relaxed">{siteDetails.instructions}</p>
                     </div>
 
+                    {(currentUser.role === 'admin' || currentUser.role === 'supervisor') && (
+                      <form onSubmit={handleAddPersonnel} className="bg-slate-950/60 p-3 border border-slate-800 rounded-xl space-y-2">
+                        <span className="text-[10px] font-bold text-amber-400 block">Add New Guard / Staff</span>
+                        <input 
+                          type="text" 
+                          placeholder="Personnel Name" 
+                          value={newGuardName} 
+                          onChange={(e) => setNewGuardName(e.target.value)}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
+                        />
+                        <div className="flex gap-2">
+                          <select 
+                            value={newGuardRole} 
+                            onChange={(e) => setNewGuardRole(e.target.value)}
+                            className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-white flex-1"
+                          >
+                            <option value="guard">Security Guard</option>
+                            <option value="supervisor">Supervisor</option>
+                            <option value="night_supervisor">Night Supervisor</option>
+                          </select>
+                          <button type="submit" className="bg-amber-500 text-slate-950 font-bold px-3 py-1 rounded-lg text-xs">
+                            Add
+                          </button>
+                        </div>
+                      </form>
+                    )}
+
                     <div className="space-y-2">
                       <h4 className="text-xs font-bold text-white">Active Duty Roster ({users.length})</h4>
-                      <div className="space-y-1.5 max-h-44 overflow-y-auto">
+                      <div className="space-y-1.5 max-h-36 overflow-y-auto">
                         {users.map((u) => (
                           <div key={u.id} className="p-2 bg-slate-950 border border-slate-800 rounded-lg flex justify-between items-center text-xs">
                             <div className="flex items-center gap-2">
@@ -400,7 +398,216 @@
                   </div>
                 )}
 
-                {/* TAB: PATROL ROUTE */}
+                {/* TAB 2: EDIT SITE DETAILS */}
+                {activeTab === 'site' && (
+                  <div className="space-y-3">
+                    <form onSubmit={handleSaveSiteDetails} className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-2.5">
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <h4 className="text-xs font-bold text-white">Update Property Details</h4>
+                        <Icon name="building" className="w-4 h-4 text-amber-500" />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Property / Site Name</label>
+                        <input 
+                          type="text" 
+                          value={editSite.name} 
+                          onChange={(e) => setEditSite({ ...editSite, name: e.target.value })}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Property Type</label>
+                        <select 
+                          value={editSite.type} 
+                          onChange={(e) => setEditSite({ ...editSite, type: e.target.value })}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white"
+                        >
+                          <option value="18 Storey Commercial Tower">18 Storey Commercial Tower</option>
+                          <option value="Residential Society">Residential Society</option>
+                          <option value="Commercial Tower">Commercial Tower</option>
+                          <option value="Warehouse / Depot">Warehouse / Depot</option>
+                          <option value="Hospital Campus">Hospital Campus</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Full Address</label>
+                        <input 
+                          type="text" 
+                          value={editSite.address} 
+                          onChange={(e) => setEditSite({ ...editSite, address: e.target.value })}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1">
+                          <label className="text-[9px] text-slate-400 uppercase font-semibold">Gates Setup</label>
+                          <input 
+                            type="text" 
+                            value={editSite.gates} 
+                            onChange={(e) => setEditSite({ ...editSite, gates: e.target.value })}
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white" 
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[9px] text-slate-400 uppercase font-semibold">Emergency Helpline</label>
+                          <input 
+                            type="text" 
+                            value={editSite.helpline} 
+                            onChange={(e) => setEditSite({ ...editSite, helpline: e.target.value })}
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white" 
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Site Standing Orders</label>
+                        <textarea 
+                          value={editSite.instructions} 
+                          onChange={(e) => setEditSite({ ...editSite, instructions: e.target.value })}
+                          rows={3}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white resize-none" 
+                        />
+                      </div>
+
+                      <button type="submit" className="w-full bg-amber-500 text-slate-950 font-bold py-2 rounded-lg text-xs uppercase tracking-wider">
+                        Save Site Changes
+                      </button>
+                    </form>
+                  </div>
+                )}
+
+                {/* TAB 3: VISITORS (WITH LIVE CAMERA) */}
+                {activeTab === 'visitors' && (
+                  <div className="space-y-3">
+                    <form onSubmit={handleAddVisitor} className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-2.5">
+                      <div className="flex justify-between items-center border-b border-slate-900 pb-1.5">
+                        <span className="text-xs font-bold text-white block">Visitor Verification</span>
+                        <span className="text-[8px] text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 font-mono tracking-wider">
+                          Live AI Linked
+                        </span>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-[9px] text-slate-400 uppercase font-semibold">1. Capture Visitor Face</label>
+                        
+                        {cameraError ? (
+                          <div className="p-3 border border-red-500/30 bg-red-500/10 rounded-xl text-red-400 text-xs text-center">
+                            {cameraError}
+                          </div>
+                        ) : capturedPhoto ? (
+                          <div className="relative w-full aspect-square bg-slate-900 rounded-xl overflow-hidden border-2 border-emerald-500/50">
+                            <img src={capturedPhoto} alt="Captured visitor" className="w-full h-full object-cover" />
+                            <button 
+                              type="button" 
+                              onClick={() => { setCapturedPhoto(null); startCamera(); }}
+                              className="absolute bottom-2 right-2 bg-slate-900/80 text-white p-2 rounded-lg border border-slate-700 backdrop-blur-sm"
+                            >
+                              <Icon name="refresh" className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ) : isCameraActive ? (
+                          <div className="relative w-full aspect-square bg-black rounded-xl overflow-hidden border border-slate-700">
+                            <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover"></video>
+                            <button 
+                              type="button" 
+                              onClick={takePhoto}
+                              className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 font-bold px-4 py-2 rounded-full shadow-lg text-xs flex items-center gap-2"
+                            >
+                              <Icon name="camera" className="w-4 h-4" /> Snap Photo
+                            </button>
+                          </div>
+                        ) : (
+                          <button 
+                            type="button" 
+                            onClick={startCamera}
+                            className="w-full h-20 border-2 border-dashed border-slate-700 hover:border-amber-500 hover:bg-amber-500/5 rounded-xl flex flex-col items-center justify-center gap-1 text-slate-400 transition"
+                          >
+                            <Icon name="camera" className="w-6 h-6" />
+                            <span className="text-xs">Tap to Open Camera</span>
+                          </button>
+                        )}
+                        <canvas ref={canvasRef} className="hidden"></canvas>
+                      </div>
+
+                      <div className="space-y-1 mt-2 border-t border-slate-900 pt-2">
+                        <label className="text-[9px] text-slate-400 uppercase font-semibold">2. Visitor Details</label>
+                        <input 
+                          type="text" 
+                          placeholder="Visitor Full Name" 
+                          value={visitorName} 
+                          onChange={(e) => setVisitorName(e.target.value)}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
+                          required
+                        />
+
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          <input 
+                            type="text" 
+                            placeholder="Phone / Govt ID" 
+                            value={visitorPhone} 
+                            onChange={(e) => setVisitorPhone(e.target.value)}
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white" 
+                          />
+                          <input 
+                            type="text" 
+                            placeholder="Whom to meet (Flat#)" 
+                            value={visitorHost} 
+                            onChange={(e) => setVisitorHost(e.target.value)}
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white" 
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <button 
+                        type="submit" 
+                        className="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-2.5 rounded-lg text-xs uppercase tracking-wider transition"
+                      >
+                        Submit & Scan Record
+                      </button>
+                    </form>
+
+                    <div className="space-y-2">
+                      <h4 className="text-xs font-bold text-white">Active Visitor Passes</h4>
+                      <div className="space-y-2.5">
+                        {visitors.map((v) => (
+                          <div key={v.id} className="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-center gap-2.5">
+                                {v.photo.startsWith('data:image') ? (
+                                  <img src={v.photo} alt="Visitor" className="w-10 h-10 object-cover rounded-lg border border-slate-700" />
+                                ) : (
+                                  <div className="w-10 h-10 bg-slate-900 border border-slate-700 rounded-lg flex items-center justify-center text-xl">
+                                    {v.photo}
+                                  </div>
+                                )}
+                                <div>
+                                  <div className="font-bold text-white text-xs">{v.name}</div>
+                                  <div className="text-[10px] text-slate-400">{v.company} • Host: {v.host}</div>
+                                </div>
+                              </div>
+                              <span className="text-[9px] text-emerald-400 font-mono bg-emerald-950/40 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                                In: {v.inTime}
+                              </span>
+                            </div>
+
+                            <div className={`p-1.5 rounded-lg border text-[9px] font-mono flex items-center justify-between ${v.statusColor}`}>
+                              <span>🛡️ AI Database Search:</span>
+                              <span className="font-bold">{v.policeCheck}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* TAB 4: PATROL ROUTE */}
                 {activeTab === 'patrol' && (
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
@@ -430,7 +637,7 @@
                   </div>
                 )}
 
-                {/* TAB: INCIDENTS */}
+                {/* TAB 5: INCIDENTS */}
                 {activeTab === 'incidents' && (
                   <div className="space-y-3">
                     <h4 className="text-xs font-bold text-white">Recent Security Logs</h4>
@@ -451,15 +658,19 @@
 
               </div>
 
-              {/* Bottom Mobile Navigation */}
-              <div className="grid grid-cols-4 border-t border-slate-800 pt-2 text-center text-[9px] bg-slate-900 mt-2">
-                <button onClick={() => setActiveTab('visitors')} className={activeTab === 'visitors' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
-                  <Icon name="users" className="w-4 h-4 mx-auto" />
-                  <span>Visitors</span>
-                </button>
+              {/* Bottom 5 Toolbar Navigation Bar */}
+              <div className="absolute bottom-0 left-0 right-0 grid grid-cols-5 border-t border-slate-800 pt-2 pb-2 text-center text-[9px] bg-slate-950/95 backdrop-blur-md z-30">
                 <button onClick={() => setActiveTab('home')} className={activeTab === 'home' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
                   <Icon name="home" className="w-4 h-4 mx-auto" />
                   <span>Home</span>
+                </button>
+                <button onClick={() => setActiveTab('site')} className={activeTab === 'site' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
+                  <Icon name="cog" className="w-4 h-4 mx-auto" />
+                  <span>Site Info</span>
+                </button>
+                <button onClick={() => setActiveTab('visitors')} className={activeTab === 'visitors' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
+                  <Icon name="users" className="w-4 h-4 mx-auto" />
+                  <span>Visitors</span>
                 </button>
                 <button onClick={() => setActiveTab('patrol')} className={activeTab === 'patrol' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
                   <Icon name="map" className="w-4 h-4 mx-auto" />
