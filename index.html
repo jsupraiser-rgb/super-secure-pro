@@ -22,7 +22,7 @@
 
   <!-- Main Application Script -->
   <script type="text/babel">
-    const { useState, useRef } = React;
+    const { useState } = React;
 
     // SVG Icon Helper Component
     const Icon = ({ name, className = "w-5 h-5" }) => {
@@ -32,26 +32,35 @@
         users: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>,
         map: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>,
         exclamation: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>,
-        qr: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h.01M16 20h2M4 4h4v4H4V4zm12 0h4v4h-4V4zm0 12h4v4h-4v-4zM4 16h4v4H4v-4z" /></svg>,
         cog: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
-        plus: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+        building: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
       };
       return icons[name] || null;
     };
 
     function App() {
-      // Updated Full Team Personnel Roster
+      // Dynamic Editable Site Details State
+      const [siteDetails, setSiteDetails] = useState({
+        name: 'Royal Orchid Housing Society',
+        type: 'Residential Society',
+        address: 'Sector 14, Plot 88, Central Palm Avenue',
+        gates: '3 Gates (Gate 1 Main, Gate 2 Service, Gate 3 Emergency)',
+        helpline: '+91 98765 00000',
+        instructions: 'All delivery drivers must present digital OTP pass at Gate 1. Overnight visitor parking requires supervisor sign-off.'
+      });
+
+      // Team Personnel Roster
       const [users, setUsers] = useState([
-        { id: 'usr-1', name: 'Javed Shaikh', role: 'admin', title: 'System Admin', avatar: '🛡️', status: 'approved' },
-        { id: 'usr-2', name: 'Kishor Ladawte', role: 'supervisor', title: 'Security Supervisor', avatar: '👔', status: 'approved' },
-        { id: 'usr-3', name: 'Siraj Pathan', role: 'supervisor', title: '2nd Supervisor', avatar: '👔', status: 'approved' },
-        { id: 'usr-4', name: 'Raju Sonekamble', role: 'night_supervisor', title: 'Night Supervisor', avatar: '🌙', status: 'approved' },
-        { id: 'usr-5', name: 'Ravi Khandare', role: 'guard', title: 'Security Guard', avatar: '👮', status: 'approved' },
-        { id: 'usr-6', name: 'Vimal Yadav', role: 'guard', title: 'Security Guard', avatar: '👮', status: 'approved' },
-        { id: 'usr-7', name: 'Shiv Sevak Yadav', role: 'guard', title: 'Security Guard', avatar: '👮', status: 'approved' },
-        { id: 'usr-8', name: 'Swapnil Shinde', role: 'guard', title: 'Security Guard', avatar: '👮', status: 'approved' },
-        { id: 'usr-9', name: 'Suraj Pal', role: 'guard', title: 'Security Guard', avatar: '👮', status: 'approved' },
-        { id: 'usr-10', name: 'Phool Hasan', role: 'guard', title: 'Security Guard', avatar: '👮', status: 'approved' }
+        { id: 'usr-1', name: 'Javed Shaikh', role: 'admin', title: 'System Admin', avatar: '🛡️' },
+        { id: 'usr-2', name: 'Kishor Ladawte', role: 'supervisor', title: 'Security Supervisor', avatar: '👔' },
+        { id: 'usr-3', name: 'Siraj Pathan', role: 'supervisor', title: '2nd Supervisor', avatar: '👔' },
+        { id: 'usr-4', name: 'Raju Sonekamble', role: 'night_supervisor', title: 'Night Supervisor', avatar: '🌙' },
+        { id: 'usr-5', name: 'Ravi Khandare', role: 'guard', title: 'Security Guard', avatar: '👮' },
+        { id: 'usr-6', name: 'Vimal Yadav', role: 'guard', title: 'Security Guard', avatar: '👮' },
+        { id: 'usr-7', name: 'Shiv Sevak Yadav', role: 'guard', title: 'Security Guard', avatar: '👮' },
+        { id: 'usr-8', name: 'Swapnil Shinde', role: 'guard', title: 'Security Guard', avatar: '👮' },
+        { id: 'usr-9', name: 'Suraj Pal', role: 'guard', title: 'Security Guard', avatar: '👮' },
+        { id: 'usr-10', name: 'Phool Hasan', role: 'guard', title: 'Security Guard', avatar: '👮' }
       ]);
 
       const [currentUser, setCurrentUser] = useState(users[0]);
@@ -59,20 +68,21 @@
       const [sosActive, setSosActive] = useState(false);
       const [notification, setNotification] = useState(null);
 
-      // Form States
+      // Temporary Editing States for Site Form
+      const [editSite, setEditSite] = useState({ ...siteDetails });
       const [newGuardName, setNewGuardName] = useState('');
       const [newGuardRole, setNewGuardRole] = useState('guard');
       const [visitorName, setVisitorName] = useState('');
       const [visitorHost, setVisitorHost] = useState('');
 
       const [visitors, setVisitors] = useState([
-        { id: 'vis-1', name: 'Amit Patel', company: 'Amazon', host: 'Flat 402 - Roy', inTime: '01:45 PM' },
-        { id: 'vis-2', name: 'Ramesh Sen', company: 'Urban Company', host: 'Flat 101 - Sharma', inTime: '02:10 PM' }
+        { id: 'vis-1', name: 'Amit Patel', company: 'Amazon', host: 'Flat 402', inTime: '01:45 PM' },
+        { id: 'vis-2', name: 'Ramesh Sen', company: 'Urban Company', host: 'Flat 101', inTime: '02:10 PM' }
       ]);
 
       const [incidents, setIncidents] = useState([
-        { id: 'inc-1', title: 'Basement Parking Light Defect', location: 'B2 Parking', reporter: 'Raju Sonekamble', severity: 'medium', time: '02:15 AM' },
-        { id: 'inc-2', title: 'Unauthorized Parking Warning', location: 'Gate 2 Entrance', reporter: 'Ravi Khandare', severity: 'low', time: '11:30 AM' }
+        { id: 'inc-1', title: 'Basement Light Defect', location: 'B2 Parking', reporter: 'Raju Sonekamble', severity: 'medium', time: '02:15 AM' },
+        { id: 'inc-2', title: 'Unauthorized Parking', location: 'Gate 2', reporter: 'Ravi Khandare', severity: 'low', time: '11:30 AM' }
       ]);
 
       const checkpoints = [
@@ -89,6 +99,12 @@
       const showNotify = (msg) => {
         setNotification(msg);
         setTimeout(() => setNotification(null), 3000);
+      };
+
+      const handleSaveSiteDetails = (e) => {
+        e.preventDefault();
+        setSiteDetails({ ...editSite });
+        showNotify("Site details updated successfully!");
       };
 
       const handleScan = (pt) => {
@@ -114,8 +130,7 @@
           name: newGuardName,
           role: newGuardRole,
           title: roleTitles[newGuardRole] || 'Security Staff',
-          avatar: newGuardRole === 'night_supervisor' ? '🌙' : newGuardRole === 'supervisor' ? '👔' : '👮',
-          status: 'approved'
+          avatar: newGuardRole === 'night_supervisor' ? '🌙' : newGuardRole === 'supervisor' ? '👔' : '👮'
         };
         setUsers([...users, newUser]);
         setNewGuardName('');
@@ -141,7 +156,7 @@
       return (
         <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col md:flex-row items-center justify-center p-4 gap-6 font-sans">
           
-          {/* Desktop Control Panel - Switch Personnel */}
+          {/* Desktop Control Panel */}
           <div className="w-full md:w-80 max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-2xl space-y-4">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-amber-500/10 rounded-xl border border-amber-500/20 text-amber-500">
@@ -153,9 +168,17 @@
               </div>
             </div>
 
+            {/* Current Active Site Card */}
+            <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-1">
+              <span className="text-[9px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded uppercase font-mono font-bold">Active Property</span>
+              <h3 className="font-bold text-white text-xs mt-1">{siteDetails.name}</h3>
+              <p className="text-[10px] text-slate-400">{siteDetails.type}</p>
+              <p className="text-[9px] text-slate-500">{siteDetails.address}</p>
+            </div>
+
             <div className="space-y-2">
               <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Active Staff Switcher</span>
-              <div className="space-y-1.5 max-h-72 overflow-y-auto pr-1">
+              <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
                 {users.map((u) => (
                   <button
                     key={u.id}
@@ -202,7 +225,7 @@
               </span>
             </div>
 
-            {/* Main Application Container */}
+            {/* Main Application Viewport */}
             <div className="flex-1 overflow-y-auto px-4 py-2 mt-1 bg-slate-900 rounded-[32px] flex flex-col justify-between">
               
               <div>
@@ -231,13 +254,28 @@
                 {/* TAB 1: HOME PANEL */}
                 {activeTab === 'home' && (
                   <div className="space-y-3">
-                    <div className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-1">
-                      <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded uppercase font-mono font-bold">Active Zone</span>
-                      <h4 className="font-bold text-white text-xs mt-1">OST Security Headquarters</h4>
-                      <p className="text-[10px] text-slate-400">Duty Staff On Site: {users.length} Registered</p>
+                    
+                    {/* Site Information Box */}
+                    <div className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-1.5">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded uppercase font-mono font-bold">Deployed Property</span>
+                        <span className="text-[9px] text-slate-500">{siteDetails.type}</span>
+                      </div>
+                      <h4 className="font-bold text-white text-xs">{siteDetails.name}</h4>
+                      <p className="text-[10px] text-slate-400">{siteDetails.address}</p>
+                      <div className="pt-1 border-t border-slate-900 text-[10px] text-slate-300 flex justify-between">
+                        <span>🚪 {siteDetails.gates}</span>
+                        <span className="text-amber-400 font-mono">☎️ {siteDetails.helpline}</span>
+                      </div>
                     </div>
 
-                    {/* Quick Staff Add Form (for Admin or Supervisors) */}
+                    {/* Security Rules Box */}
+                    <div className="p-2.5 bg-amber-500/10 border border-amber-500/20 rounded-xl text-xs space-y-1">
+                      <span className="font-bold text-amber-400 text-[10px] block uppercase">Site Standing Orders:</span>
+                      <p className="text-[10px] text-slate-300 leading-relaxed">{siteDetails.instructions}</p>
+                    </div>
+
+                    {/* Quick Add Staff Form */}
                     {(currentUser.role === 'admin' || currentUser.role === 'supervisor') && (
                       <form onSubmit={handleAddPersonnel} className="bg-slate-950/60 p-3 border border-slate-800 rounded-xl space-y-2">
                         <span className="text-[10px] font-bold text-amber-400 block">Add New Guard / Staff</span>
@@ -267,8 +305,8 @@
 
                     {/* Active Guards List */}
                     <div className="space-y-2">
-                      <h4 className="text-xs font-bold text-white">Active Duty Staff Roster</h4>
-                      <div className="space-y-1.5 max-h-40 overflow-y-auto">
+                      <h4 className="text-xs font-bold text-white">Active Duty Roster ({users.length})</h4>
+                      <div className="space-y-1.5 max-h-36 overflow-y-auto">
                         {users.map((u) => (
                           <div key={u.id} className="p-2 bg-slate-950 border border-slate-800 rounded-lg flex justify-between items-center text-xs">
                             <div className="flex items-center gap-2">
@@ -283,7 +321,90 @@
                   </div>
                 )}
 
-                {/* TAB 2: VISITORS */}
+                {/* TAB 2: EDIT SITE DETAILS */}
+                {activeTab === 'site' && (
+                  <div className="space-y-3">
+                    <form onSubmit={handleSaveSiteDetails} className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-2.5">
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <h4 className="text-xs font-bold text-white">Update Property Details</h4>
+                        <Icon name="building" className="w-4 h-4 text-amber-500" />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Property / Site Name</label>
+                        <input 
+                          type="text" 
+                          value={editSite.name} 
+                          onChange={(e) => setEditSite({ ...editSite, name: e.target.value })}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Property Type</label>
+                        <select 
+                          value={editSite.type} 
+                          onChange={(e) => setEditSite({ ...editSite, type: e.target.value })}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white"
+                        >
+                          <option value="Residential Society">Residential Society</option>
+                          <option value="Commercial Tower">Commercial Tower</option>
+                          <option value="Warehouse / Depot">Warehouse / Depot</option>
+                          <option value="Hospital Campus">Hospital Campus</option>
+                          <option value="Educational Institute">Educational Institute / School</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Full Address</label>
+                        <input 
+                          type="text" 
+                          value={editSite.address} 
+                          onChange={(e) => setEditSite({ ...editSite, address: e.target.value })}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white" 
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1">
+                          <label className="text-[9px] text-slate-400 uppercase font-semibold">Gates Setup</label>
+                          <input 
+                            type="text" 
+                            value={editSite.gates} 
+                            onChange={(e) => setEditSite({ ...editSite, gates: e.target.value })}
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white" 
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[9px] text-slate-400 uppercase font-semibold">Emergency Helpline</label>
+                          <input 
+                            type="text" 
+                            value={editSite.helpline} 
+                            onChange={(e) => setEditSite({ ...editSite, helpline: e.target.value })}
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2 py-1.5 text-xs text-white" 
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[9px] text-slate-400 uppercase font-semibold">Site Security Orders & Instructions</label>
+                        <textarea 
+                          value={editSite.instructions} 
+                          onChange={(e) => setEditSite({ ...editSite, instructions: e.target.value })}
+                          rows={3}
+                          className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white resize-none" 
+                        />
+                      </div>
+
+                      <button type="submit" className="w-full bg-amber-500 text-slate-950 font-bold py-2 rounded-lg text-xs uppercase tracking-wider">
+                        Save Site Changes
+                      </button>
+                    </form>
+                  </div>
+                )}
+
+                {/* TAB 3: VISITORS */}
                 {activeTab === 'visitors' && (
                   <div className="space-y-3">
                     <form onSubmit={handleAddVisitor} className="bg-slate-950 p-3 border border-slate-800 rounded-xl space-y-2">
@@ -322,7 +443,7 @@
                   </div>
                 )}
 
-                {/* TAB 3: PATROL ROUTE */}
+                {/* TAB 4: PATROL ROUTE */}
                 {activeTab === 'patrol' && (
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
@@ -352,7 +473,7 @@
                   </div>
                 )}
 
-                {/* TAB 4: INCIDENTS */}
+                {/* TAB 5: INCIDENTS */}
                 {activeTab === 'incidents' && (
                   <div className="space-y-3">
                     <h4 className="text-xs font-bold text-white">Recent Security Logs</h4>
@@ -373,29 +494,33 @@
 
               </div>
 
-              {/* Bottom Mobile Tab Navigation */}
-              <div className="grid grid-cols-4 border-t border-slate-800 pt-2 text-center text-[10px] bg-slate-900 mt-2">
+              {/* Bottom Mobile Navigation */}
+              <div className="grid grid-cols-5 border-t border-slate-800 pt-2 text-center text-[9px] bg-slate-900 mt-2">
                 <button onClick={() => setActiveTab('home')} className={activeTab === 'home' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
-                  <Icon name="home" className="w-5 h-5 mx-auto" />
+                  <Icon name="home" className="w-4 h-4 mx-auto" />
                   <span>Home</span>
                 </button>
+                <button onClick={() => setActiveTab('site')} className={activeTab === 'site' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
+                  <Icon name="cog" className="w-4 h-4 mx-auto" />
+                  <span>Site Info</span>
+                </button>
                 <button onClick={() => setActiveTab('visitors')} className={activeTab === 'visitors' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
-                  <Icon name="users" className="w-5 h-5 mx-auto" />
+                  <Icon name="users" className="w-4 h-4 mx-auto" />
                   <span>Visitors</span>
                 </button>
                 <button onClick={() => setActiveTab('patrol')} className={activeTab === 'patrol' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
-                  <Icon name="map" className="w-5 h-5 mx-auto" />
+                  <Icon name="map" className="w-4 h-4 mx-auto" />
                   <span>Patrol</span>
                 </button>
                 <button onClick={() => setActiveTab('incidents')} className={activeTab === 'incidents' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
-                  <Icon name="exclamation" className="w-5 h-5 mx-auto" />
-                  <span>Incidents</span>
+                  <Icon name="exclamation" className="w-4 h-4 mx-auto" />
+                  <span>Logs</span>
                 </button>
               </div>
 
             </div>
 
-            {/* Mobile Bottom Gesture Handle */}
+            {/* Mobile Bottom Gesture Bar */}
             <div className="w-28 h-1 bg-slate-800 mx-auto rounded-full mt-2"></div>
           </div>
 
@@ -403,7 +528,7 @@
       );
     }
 
-    // Mount to DOM
+    // Mount Application
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
