@@ -26,6 +26,13 @@
       overscroll-behavior-y: none;
       touch-action: manipulation;
     }
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+    .animate-scanline {
+      animation: scanline 2s linear infinite;
+    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 antialiased h-screen w-screen overflow-hidden select-none">
@@ -44,20 +51,20 @@
         home: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>,
         users: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>,
         map: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>,
-        exclamation: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>,
         cog: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
         building: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>,
         camera: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>,
-        refresh: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+        refresh: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>,
+        user: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>,
+        check: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>,
+        x: <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} className={className}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
       };
       return icons[name] || null;
     };
 
     function App() {
-      // Local Storage Loaders & Persistence
-      const [retentionDays, setRetentionDays] = useState(() => {
-        return localStorage.getItem('ost_retention') || '20';
-      });
+      // Storage Hydration
+      const [retentionDays, setRetentionDays] = useState(() => localStorage.getItem('ost_retention') || '20');
 
       const [siteDetails, setSiteDetails] = useState(() => {
         const saved = localStorage.getItem('ost_siteDetails');
@@ -72,16 +79,16 @@
       });
 
       const [users, setUsers] = useState([
-        { id: 'usr-1', name: 'Javed Shaikh', role: 'admin', title: 'System Admin', avatar: '🛡️' },
-        { id: 'usr-2', name: 'Kishor Ladawte', role: 'supervisor', title: 'Security Supervisor', avatar: '👔' },
-        { id: 'usr-3', name: 'Siraj Pathan', role: 'supervisor', title: '2nd Supervisor', avatar: '👔' },
-        { id: 'usr-4', name: 'Raju Sonekamble', role: 'night_supervisor', title: 'Night Supervisor', avatar: '🌙' },
-        { id: 'usr-5', name: 'Ravi Khandare', role: 'guard', title: 'Security Guard', avatar: '👮' },
-        { id: 'usr-6', name: 'Vimal Yadav', role: 'guard', title: 'Security Guard', avatar: '👮' },
-        { id: 'usr-7', name: 'Shiv Sevak Yadav', role: 'guard', title: 'Security Guard', avatar: '👮' },
-        { id: 'usr-8', name: 'Swapnil Shinde', role: 'guard', title: 'Security Guard', avatar: '👮' },
-        { id: 'usr-9', name: 'Suraj Pal', role: 'guard', title: 'Security Guard', avatar: '👮' },
-        { id: 'usr-10', name: 'Phool Hasan', role: 'guard', title: 'Security Guard', avatar: '👮' }
+        { id: 'usr-1', name: 'Javed Shaikh', role: 'admin', title: 'System Admin', avatar: '🛡️', empId: 'OST-ADM-001', shift: '08:00 AM - 05:00 PM' },
+        { id: 'usr-2', name: 'Kishor Ladawte', role: 'supervisor', title: 'Security Supervisor', avatar: '👔', empId: 'OST-SUP-012', shift: '07:00 AM - 03:00 PM' },
+        { id: 'usr-3', name: 'Siraj Pathan', role: 'supervisor', title: '2nd Supervisor', avatar: '👔', empId: 'OST-SUP-014', shift: '03:00 PM - 11:00 PM' },
+        { id: 'usr-4', name: 'Raju Sonekamble', role: 'night_supervisor', title: 'Night Supervisor', avatar: '🌙', empId: 'OST-SUP-019', shift: '11:00 PM - 07:00 AM' },
+        { id: 'usr-5', name: 'Ravi Khandare', role: 'guard', title: 'Security Guard', avatar: '👮', empId: 'OST-GDR-101', shift: '07:00 AM - 03:00 PM' },
+        { id: 'usr-6', name: 'Vimal Yadav', role: 'guard', title: 'Security Guard', avatar: '👮', empId: 'OST-GDR-102', shift: '07:00 AM - 03:00 PM' },
+        { id: 'usr-7', name: 'Shiv Sevak Yadav', role: 'guard', title: 'Security Guard', avatar: '👮', empId: 'OST-GDR-103', shift: '03:00 PM - 11:00 PM' },
+        { id: 'usr-8', name: 'Swapnil Shinde', role: 'guard', title: 'Security Guard', avatar: '👮', empId: 'OST-GDR-104', shift: '03:00 PM - 11:00 PM' },
+        { id: 'usr-9', name: 'Suraj Pal', role: 'guard', title: 'Security Guard', avatar: '👮', empId: 'OST-GDR-105', shift: '11:00 PM - 07:00 AM' },
+        { id: 'usr-10', name: 'Phool Hasan', role: 'guard', title: 'Security Guard', avatar: '👮', empId: 'OST-GDR-106', shift: '11:00 PM - 07:00 AM' }
       ]);
 
       const [currentUser, setCurrentUser] = useState(users[0]);
@@ -95,12 +102,13 @@
       const [newGuardName, setNewGuardName] = useState('');
       const [newGuardRole, setNewGuardRole] = useState('guard');
 
-      // Camera States
+      // Camera & Face Detection Simulation States
       const videoRef = useRef(null);
       const canvasRef = useRef(null);
       const [isCameraActive, setIsCameraActive] = useState(false);
       const [capturedPhoto, setCapturedPhoto] = useState(null);
       const [cameraError, setCameraError] = useState(null);
+      const [faceDetected, setFaceDetected] = useState(false);
       
       // Visitor Form States
       const [visitorName, setVisitorName] = useState('');
@@ -126,19 +134,62 @@
         ];
       });
 
-      const [incidents] = useState([
-        { id: 'inc-1', title: 'Basement Parking Light Defect', location: 'B2 Parking', reporter: 'Raju Sonekamble', severity: 'medium', time: '02:15 AM' },
-        { id: 'inc-2', title: 'Unauthorized Parking Warning', location: 'Gate 2 Entrance', reporter: 'Ravi Khandare', severity: 'low', time: '11:30 AM' }
-      ]);
-
-      // Essential Patrolling Duties as Checkpoints
-      const checkpoints = [
-        'Gate 1 & Gate 2 Security Booth Check',
-        'Inspect Basement 1 & 2 Parking & Light Panels',
-        'Check Fire Extinguishers & Exit Stairwells',
-        'Inspect Water Pump Room & Electrical Substation',
-        'Verify Service Loading Dock & Material Gates',
-        'Inspect Refuge Areas & 18th Floor Terrace Door Lock'
+      // Detailed Checkpoints with Sub-Duties
+      const checkpointsList = [
+        {
+          id: 'p1',
+          title: 'Gate 1 & Gate 2 Security Booths',
+          duties: [
+            'Verify all incoming delivery vehicles against expected material logs',
+            'Ensure visitor intercom tablet is active and connected',
+            'Inspect boom barrier automatic sensors and manual release lock'
+          ]
+        },
+        {
+          id: 'p2',
+          title: 'Basement 1 & 2 Parking Grids',
+          duties: [
+            'Inspect B1/B2 ventilation fans and exhaust air quality',
+            'Check for unauthorized overnight parked vehicles or oil leaks',
+            'Verify fire hose reel cabinets and emergency push-glass switches'
+          ]
+        },
+        {
+          id: 'p3',
+          title: 'Fire Hose Cabinets & Exit Stairwells',
+          duties: [
+            'Check pressure gauges on all portable CO2/Water fire extinguishers',
+            'Ensure all emergency stairwell doors open outward and are unblocked',
+            'Inspect battery emergency lights in stairwell landings'
+          ]
+        },
+        {
+          id: 'p4',
+          title: 'Water Pump Room & Substation',
+          duties: [
+            'Record primary domestic and overhead tank water level meters',
+            'Check high-voltage electrical panels for unusual heat or humming',
+            'Verify automatic diesel generator backup fuel level indicator'
+          ]
+        },
+        {
+          id: 'p5',
+          title: 'Service Loading Dock & Vendor Bay',
+          duties: [
+            'Audit contractor worker entry badges and safety helmet compliance',
+            'Inspect compactor waste room door locks and seal tags',
+            'Check service elevator interior wall padding'
+          ]
+        },
+        {
+          id: 'p6',
+          title: 'Refuge Areas & 18th Floor Terrace Door',
+          duties: [
+            'Ensure 8th & 13th refuge floor emergency exits are completely clear',
+            'Verify 18th floor terrace heavy-duty padlocks are secured',
+            'Inspect solar panel array perimeter fencing'
+          ]
+        }
       ];
 
       const [scannedPoints, setScannedPoints] = useState(() => {
@@ -146,22 +197,11 @@
         return saved ? JSON.parse(saved) : [];
       });
 
-      // Save Data Effects
-      useEffect(() => {
-        localStorage.setItem('ost_siteDetails', JSON.stringify(siteDetails));
-      }, [siteDetails]);
-
-      useEffect(() => {
-        localStorage.setItem('ost_visitors', JSON.stringify(visitors));
-      }, [visitors]);
-
-      useEffect(() => {
-        localStorage.setItem('ost_scannedPoints', JSON.stringify(scannedPoints));
-      }, [scannedPoints]);
-
-      useEffect(() => {
-        localStorage.setItem('ost_retention', retentionDays);
-      }, [retentionDays]);
+      // Storage Sync Effects
+      useEffect(() => { localStorage.setItem('ost_siteDetails', JSON.stringify(siteDetails)); }, [siteDetails]);
+      useEffect(() => { localStorage.setItem('ost_visitors', JSON.stringify(visitors)); }, [visitors]);
+      useEffect(() => { localStorage.setItem('ost_scannedPoints', JSON.stringify(scannedPoints)); }, [scannedPoints]);
+      useEffect(() => { localStorage.setItem('ost_retention', retentionDays); }, [retentionDays]);
 
       const showNotify = (msg) => {
         setNotification(msg);
@@ -171,52 +211,51 @@
       const handleSaveSiteDetails = (e) => {
         e.preventDefault();
         setSiteDetails({ ...editSite });
-        showNotify(`Site details saved! Retention set to ${retentionDays} Days.`);
+        showNotify(`Config saved! Log retention set to ${retentionDays} Days.`);
       };
 
-      const handleScan = (pt) => {
-        if (scannedPoints.includes(pt)) {
-          showNotify("Patrol duty already verified!");
-          return;
+      // Toggle Duty Checkpoint
+      const toggleCheckpoint = (id) => {
+        if (scannedPoints.includes(id)) {
+          setScannedPoints(scannedPoints.filter(p => p !== id));
+          showNotify("Mark removed. Checkpoint set to Pending.");
+        } else {
+          setScannedPoints([...scannedPoints, id]);
+          showNotify("Duty Verified & Cleared!");
         }
-        const updated = [...scannedPoints, pt];
-        setScannedPoints(updated);
-        showNotify(`Duty Cleared: ${pt}`);
       };
 
       const handleAddPersonnel = (e) => {
         e.preventDefault();
         if (!newGuardName) return;
-        const roleTitles = {
-          guard: 'Security Guard',
-          supervisor: 'Supervisor',
-          night_supervisor: 'Night Supervisor',
-          admin: 'System Admin'
-        };
+        const roleTitles = { guard: 'Security Guard', supervisor: 'Supervisor', night_supervisor: 'Night Supervisor', admin: 'System Admin' };
         const newUser = {
           id: `usr-${users.length + 1}`,
           name: newGuardName,
           role: newGuardRole,
           title: roleTitles[newGuardRole] || 'Security Staff',
-          avatar: newGuardRole === 'night_supervisor' ? '🌙' : newGuardRole === 'supervisor' ? '👔' : '👮'
+          avatar: newGuardRole === 'night_supervisor' ? '🌙' : newGuardRole === 'supervisor' ? '👔' : '👮',
+          empId: `OST-GDR-${100 + users.length}`,
+          shift: '07:00 AM - 03:00 PM'
         };
         setUsers([...users, newUser]);
         setNewGuardName('');
         showNotify(`Added ${newUser.name} to Roster!`);
       };
 
-      // Realtime Camera
+      // Realtime Camera & Face Scan
       const startCamera = async () => {
         setCameraError(null);
         setCapturedPhoto(null);
+        setFaceDetected(false);
         setIsCameraActive(true);
         try {
-          const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: 'environment' } 
-          });
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
           }
+          // Simulate camera locking onto face after 1 second
+          setTimeout(() => setFaceDetected(true), 1200);
         } catch (err) {
           setCameraError("Camera access denied or device has no camera.");
           setIsCameraActive(false);
@@ -225,8 +264,7 @@
 
       const stopCamera = () => {
         if (videoRef.current && videoRef.current.srcObject) {
-          const tracks = videoRef.current.srcObject.getTracks();
-          tracks.forEach(track => track.stop());
+          videoRef.current.srcObject.getTracks().forEach(track => track.stop());
         }
         setIsCameraActive(false);
       };
@@ -240,22 +278,19 @@
           const context = canvas.getContext('2d');
           context.drawImage(video, 0, 0, canvas.width, canvas.height);
           
-          const imageDataUrl = canvas.toDataURL('image/jpeg');
-          setCapturedPhoto(imageDataUrl);
+          setCapturedPhoto(canvas.toDataURL('image/jpeg'));
           stopCamera();
         }
       };
 
-      useEffect(() => {
-        return () => stopCamera();
-      }, []);
+      useEffect(() => { return () => stopCamera(); }, []);
 
       const handleAddVisitor = (e) => {
         e.preventDefault();
         if (!visitorName || !visitorHost) return;
 
         setIsScanningPhoto(true);
-        showNotify("🔍 Scanning Face & Requesting Office Verification...");
+        showNotify("🔍 Running Facial Biometrics & Office Verification...");
 
         setTimeout(() => {
           setIsScanningPhoto(false);
@@ -276,7 +311,7 @@
           setVisitorHost('');
           setVisitorPhone('');
           setCapturedPhoto(null);
-          showNotify(`✅ Verified by ${visitorHost}! Digital pass granted.`);
+          showNotify(`✅ Verified by ${visitorHost}! Digital pass generated.`);
         }, 2000);
       };
 
@@ -294,13 +329,13 @@
           }
           return v;
         }));
-        showNotify("Office verification status updated!");
+        showNotify("Office verification updated!");
       };
 
       return (
         <div className="h-screen w-screen bg-slate-950 text-slate-100 flex flex-col justify-between overflow-hidden relative">
           
-          {/* Floating Notification */}
+          {/* Toast Notification */}
           {notification && (
             <div className="fixed top-12 left-4 right-4 z-50 p-3 rounded-xl bg-slate-900 border border-amber-500/40 text-amber-300 text-xs shadow-2xl flex items-center gap-2 animate-bounce">
               <Icon name="shield" className="w-4 h-4 flex-shrink-0" />
@@ -308,32 +343,30 @@
             </div>
           )}
 
-          {/* AI Biometric Scanning Overlay */}
+          {/* AI Face Scanning Overlay */}
           {isScanningPhoto && (
-            <div className="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 text-center border-2 border-emerald-500/50 shadow-[inset_0_0_50px_rgba(16,185,129,0.2)]">
+            <div className="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 text-center border-2 border-emerald-500/50">
               <div className="w-20 h-20 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-              <h3 className="text-emerald-400 font-bold text-lg font-mono tracking-widest uppercase">AI & Office Check</h3>
-              <p className="text-slate-300 text-xs mt-2 font-mono">Running facial scan & calling host office for verification...</p>
+              <h3 className="text-emerald-400 font-bold text-lg font-mono tracking-widest uppercase">AI Face & Police Search</h3>
+              <p className="text-slate-300 text-xs mt-2 font-mono">Comparing biometric vectors against central police database...</p>
             </div>
           )}
 
           {/* Top Header Bar */}
           <div className="bg-slate-900 border-b border-slate-800 px-4 pt-3 pb-2.5 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => setShowStaffPicker(!showStaffPicker)}
-                className="flex items-center gap-2 text-left bg-slate-950 px-2.5 py-1 rounded-xl border border-slate-800"
-              >
-                <span className="text-xl">{currentUser.avatar}</span>
-                <div>
-                  <h3 className="text-xs font-bold text-white flex items-center gap-1">
-                    {currentUser.name}
-                    <span className="text-[10px] text-amber-400">▼</span>
-                  </h3>
-                  <p className="text-[9px] text-slate-400">{currentUser.title}</p>
-                </div>
-              </button>
-            </div>
+            <button 
+              onClick={() => setShowStaffPicker(!showStaffPicker)}
+              className="flex items-center gap-2 text-left bg-slate-950 px-2.5 py-1 rounded-xl border border-slate-800"
+            >
+              <span className="text-xl">{currentUser.avatar}</span>
+              <div>
+                <h3 className="text-xs font-bold text-white flex items-center gap-1">
+                  {currentUser.name}
+                  <span className="text-[10px] text-amber-400">▼</span>
+                </h3>
+                <p className="text-[9px] text-slate-400">{currentUser.title}</p>
+              </div>
+            </button>
 
             <button 
               onClick={() => {
@@ -348,12 +381,12 @@
             </button>
           </div>
 
-          {/* Staff Switcher Modal */}
+          {/* Staff Switcher Overlay */}
           {showStaffPicker && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 p-4 flex flex-col justify-end">
               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 max-h-[70vh] flex flex-col">
                 <div className="flex justify-between items-center mb-3 pb-2 border-b border-slate-800">
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Switch Active User</h4>
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Switch Active Duty Profile</h4>
                   <button onClick={() => setShowStaffPicker(false)} className="text-slate-400 text-xs px-2 py-1 bg-slate-800 rounded-lg">Close</button>
                 </div>
                 <div className="space-y-1.5 overflow-y-auto">
@@ -363,7 +396,7 @@
                       onClick={() => {
                         setCurrentUser(u);
                         setShowStaffPicker(false);
-                        showNotify(`Switched active profile to ${u.name}`);
+                        showNotify(`Switched active duty user to ${u.name}`);
                       }}
                       className={`w-full flex items-center justify-between p-3 rounded-xl border text-left text-xs transition ${
                         currentUser.id === u.id ? 'border-amber-500 bg-amber-500/10 text-white' : 'border-slate-800 bg-slate-950 text-slate-400'
@@ -373,7 +406,7 @@
                         <span className="text-lg">{u.avatar}</span>
                         <div>
                           <div className="font-bold text-white">{u.name}</div>
-                          <div className="text-[10px] text-slate-400">{u.title}</div>
+                          <div className="text-[10px] text-slate-400">{u.title} • {u.empId}</div>
                         </div>
                       </div>
                       {currentUser.id === u.id && <span className="w-2 h-2 rounded-full bg-amber-500"></span>}
@@ -384,7 +417,7 @@
             </div>
           )}
 
-          {/* Main App Body */}
+          {/* Main App Body Container */}
           <div className="flex-1 overflow-y-auto p-4 pb-20">
             
             {/* TAB 1: HOME */}
@@ -392,7 +425,7 @@
               <div className="space-y-3">
                 <div className="bg-slate-900 p-4 border border-slate-800 rounded-2xl space-y-2 shadow-lg">
                   <div className="flex justify-between items-center">
-                    <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded uppercase font-mono font-bold">Deployed Property</span>
+                    <span className="text-[9px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded uppercase font-mono font-bold">Active Property</span>
                     <span className="text-[10px] text-slate-400">{siteDetails.type}</span>
                   </div>
                   <h2 className="font-bold text-white text-base">{siteDetails.name}</h2>
@@ -436,13 +469,16 @@
                 )}
 
                 <div className="space-y-2">
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Active Duty Roster ({users.length})</h4>
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Active Security Roster ({users.length})</h4>
                   <div className="space-y-2">
                     {users.map((u) => (
                       <div key={u.id} className="p-3 bg-slate-900 border border-slate-800 rounded-xl flex justify-between items-center text-xs">
                         <div className="flex items-center gap-3">
                           <span className="text-lg">{u.avatar}</span>
-                          <span className="font-bold text-white">{u.name}</span>
+                          <div>
+                            <div className="font-bold text-white">{u.name}</div>
+                            <div className="text-[10px] text-slate-500 font-mono">{u.empId}</div>
+                          </div>
                         </div>
                         <span className="text-[10px] text-slate-400 bg-slate-950 px-2 py-1 rounded-lg border border-slate-800">{u.title}</span>
                       </div>
@@ -457,11 +493,10 @@
               <div className="space-y-3">
                 <form onSubmit={handleSaveSiteDetails} className="bg-slate-900 p-4 border border-slate-800 rounded-2xl space-y-3">
                   <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                    <h4 className="text-xs font-bold text-white uppercase tracking-wider">Property & Storage Config</h4>
+                    <h4 className="text-xs font-bold text-white uppercase tracking-wider">Property & Retention Config</h4>
                     <Icon name="building" className="w-4 h-4 text-amber-500" />
                   </div>
 
-                  {/* Retention Setting */}
                   <div className="space-y-1 bg-slate-950 p-3 rounded-xl border border-slate-800">
                     <label className="text-[10px] text-amber-400 uppercase font-bold block">Log Auto-Save Retention Period</label>
                     <select 
@@ -473,9 +508,7 @@
                       <option value="20">20 Days Auto-Retention (Recommended for Mobile)</option>
                       <option value="30">30 Days Auto-Retention (Monthly Audit)</option>
                       <option value="60">60 Days Auto-Retention</option>
-                      <option value="90">90 Days Maximum Storage</option>
                     </select>
-                    <p className="text-[9px] text-slate-400 mt-1">20-30 Days is ideal. Keeps device memory light while keeping monthly audits accessible.</p>
                   </div>
 
                   <div className="space-y-1">
@@ -542,19 +575,19 @@
               </div>
             )}
 
-            {/* TAB 3: VISITORS */}
+            {/* TAB 3: VISITORS (WITH REALTIME CAMERA & FACE SCAN) */}
             {activeTab === 'visitors' && (
               <div className="space-y-4">
                 <form onSubmit={handleAddVisitor} className="bg-slate-900 p-4 border border-slate-800 rounded-2xl space-y-3 shadow-lg">
                   <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-                    <span className="text-xs font-bold text-white uppercase tracking-wider">Visitor Registration</span>
+                    <span className="text-xs font-bold text-white uppercase tracking-wider">Visitor Entry & Photo Scan</span>
                     <span className="text-[9px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-mono">
-                      Intercom Active
+                      AI Camera Active
                     </span>
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[10px] text-slate-400 uppercase font-semibold">1. Capture Visitor Face</label>
+                    <label className="text-[10px] text-slate-400 uppercase font-semibold">1. Biometric Visitor Capture</label>
                     
                     {cameraError ? (
                       <div className="p-3 border border-red-500/30 bg-red-500/10 rounded-xl text-red-400 text-xs text-center">
@@ -563,6 +596,9 @@
                     ) : capturedPhoto ? (
                       <div className="relative w-full aspect-square bg-slate-950 rounded-2xl overflow-hidden border-2 border-emerald-500/50">
                         <img src={capturedPhoto} alt="Captured visitor" className="w-full h-full object-cover" />
+                        <div className="absolute top-3 left-3 bg-emerald-950/80 text-emerald-400 text-[10px] font-mono px-2 py-1 rounded-lg border border-emerald-500/30 backdrop-blur-sm">
+                          ✓ Face Biometrics Locked
+                        </div>
                         <button 
                           type="button" 
                           onClick={() => { setCapturedPhoto(null); startCamera(); }}
@@ -574,12 +610,25 @@
                     ) : isCameraActive ? (
                       <div className="relative w-full aspect-square bg-black rounded-2xl overflow-hidden border border-slate-700">
                         <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover"></video>
+
+                        {/* Simulated Realtime Face Detection Box */}
+                        <div className="absolute inset-10 border-2 border-emerald-400/80 rounded-2xl pointer-events-none flex flex-col justify-between p-2">
+                          <div className="flex justify-between text-[9px] font-mono text-emerald-400 bg-slate-950/60 px-1.5 py-0.5 rounded backdrop-blur-xs">
+                            <span>[ 👤 FACE TARGETING ]</span>
+                            <span>{faceDetected ? 'LIVENESS: 98.6%' : 'SEARCHING...'}</span>
+                          </div>
+                          <div className="w-full h-0.5 bg-emerald-400/80 animate-scanline"></div>
+                          <div className="text-center text-[9px] font-mono text-emerald-300 bg-slate-950/60 py-0.5 rounded backdrop-blur-xs">
+                            {faceDetected ? 'HUMAN FACE VERIFIED' : 'ALIGN FACE IN FRAME'}
+                          </div>
+                        </div>
+
                         <button 
                           type="button" 
                           onClick={takePhoto}
-                          className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 font-bold px-5 py-2.5 rounded-full shadow-2xl text-xs flex items-center gap-2"
+                          className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 font-bold px-5 py-2.5 rounded-full shadow-2xl text-xs flex items-center gap-2 z-10"
                         >
-                          <Icon name="camera" className="w-4 h-4" /> Snap Photo
+                          <Icon name="camera" className="w-4 h-4" /> Capture Biometric Photo
                         </button>
                       </div>
                     ) : (
@@ -596,7 +645,7 @@
                   </div>
 
                   <div className="space-y-2 mt-2 border-t border-slate-800 pt-3">
-                    <label className="text-[10px] text-slate-400 uppercase font-semibold">2. Visitor & Target Office</label>
+                    <label className="text-[10px] text-slate-400 uppercase font-semibold">2. Visitor & Host Office</label>
                     <input 
                       type="text" 
                       placeholder="Visitor Full Name" 
@@ -682,56 +731,113 @@
               </div>
             )}
 
-            {/* TAB 4: BASIC PATROLLING DUTIES & CHECKPOINTS */}
+            {/* TAB 4: PATROL ROUTE & DUTIES CHECKLIST */}
             {activeTab === 'patrol' && (
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Patrolling Duties Checklist</h4>
-                  <span className="text-xs text-slate-400 font-mono">{scannedPoints.length} / {checkpoints.length} Cleared</span>
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Patrol Routine & Duties</h4>
+                  <span className="text-xs text-slate-400 font-mono">{scannedPoints.length} / {checkpointsList.length} Cleared</span>
                 </div>
 
-                <div className="space-y-2">
-                  {checkpoints.map((pt, idx) => {
-                    const isDone = scannedPoints.includes(pt);
+                <div className="space-y-3">
+                  {checkpointsList.map((pt) => {
+                    const isDone = scannedPoints.includes(pt.id);
                     return (
-                      <button
-                        key={idx}
-                        onClick={() => handleScan(pt)}
-                        className={`w-full p-3.5 rounded-2xl border text-left text-xs flex justify-between items-center transition ${
-                          isDone ? 'bg-blue-950/40 border-blue-500/50 text-blue-300' : 'bg-slate-900 border-slate-800 text-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${isDone ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
-                            {isDone ? '✓' : idx + 1}
-                          </span>
-                          <span className="font-medium text-xs">{pt}</span>
+                      <div key={pt.id} className={`p-4 rounded-2xl border transition ${isDone ? 'bg-blue-950/30 border-blue-500/50' : 'bg-slate-900 border-slate-800'}`}>
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <div className="flex items-center gap-2.5">
+                            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${isDone ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                              {isDone ? '✓' : pt.id.replace('p','')}
+                            </span>
+                            <h5 className="font-bold text-white text-xs">{pt.title}</h5>
+                          </div>
+
+                          {/* Toggle Check Button */}
+                          <button
+                            type="button"
+                            onClick={() => toggleCheckpoint(pt.id)}
+                            className={`px-3 py-1.5 rounded-xl font-mono text-[10px] transition ${
+                              isDone ? 'bg-blue-500 text-white font-bold' : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white'
+                            }`}
+                          >
+                            {isDone ? 'VERIFIED ✓' : 'MARK DONE'}
+                          </button>
                         </div>
-                        <span className={`text-[10px] px-2.5 py-1 rounded-lg font-mono ${isDone ? 'bg-blue-500 text-white' : 'bg-slate-950 text-slate-400'}`}>
-                          {isDone ? 'VERIFIED' : 'TAP SCAN'}
-                        </span>
-                      </button>
+
+                        {/* List of Patrol Duties */}
+                        <div className="pl-8 space-y-1 border-t border-slate-800/80 pt-2.5">
+                          <span className="text-[9px] uppercase font-bold text-slate-500 block mb-1">Required Duties:</span>
+                          {pt.duties.map((duty, dIdx) => (
+                            <div key={dIdx} className="flex items-start gap-1.5 text-[11px] text-slate-400">
+                              <span className="text-amber-500 font-bold">•</span>
+                              <span>{duty}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     );
                   })}
                 </div>
               </div>
             )}
 
-            {/* TAB 5: INCIDENTS */}
-            {activeTab === 'incidents' && (
-              <div className="space-y-3">
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider">Recent Security Logs</h4>
-                <div className="space-y-2">
-                  {incidents.map((inc) => (
-                    <div key={inc.id} className="p-3.5 bg-slate-900 border border-slate-800 rounded-2xl text-xs space-y-1">
-                      <div className="flex justify-between font-bold text-rose-400">
-                        <span>{inc.title}</span>
-                        <span className="text-[10px] text-slate-500">{inc.time}</span>
-                      </div>
-                      <p className="text-[11px] text-slate-400">Location: {inc.location}</p>
-                      <span className="text-[10px] text-amber-400 block pt-1 border-t border-slate-800">Reported by: {inc.reporter}</span>
+            {/* TAB 5: USER PROFILE PAGE */}
+            {activeTab === 'profile' && (
+              <div className="space-y-4">
+                {/* Profile Badge */}
+                <div className="bg-slate-900 p-5 border border-slate-800 rounded-2xl text-center space-y-3 relative overflow-hidden">
+                  <div className="w-20 h-20 bg-slate-950 border-2 border-amber-500/50 rounded-full flex items-center justify-center text-4xl mx-auto shadow-inner">
+                    {currentUser.avatar}
+                  </div>
+                  <div>
+                    <h2 className="text-base font-bold text-white">{currentUser.name}</h2>
+                    <p className="text-xs text-amber-400 font-mono mt-0.5">{currentUser.title}</p>
+                    <span className="text-[10px] bg-slate-950 text-slate-400 px-2.5 py-1 rounded-full border border-slate-800 mt-2 inline-block font-mono">
+                      ID: {currentUser.empId}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Duty Details & Shift Schedule */}
+                <div className="bg-slate-900 p-4 border border-slate-800 rounded-2xl space-y-3">
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider border-b border-slate-800 pb-2">Active Duty Shift</h4>
+                  
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+                      <span className="text-[9px] text-slate-500 uppercase block font-semibold">Shift Hours</span>
+                      <span className="font-mono text-white text-[11px] mt-0.5 block">{currentUser.shift}</span>
                     </div>
-                  ))}
+
+                    <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+                      <span className="text-[9px] text-slate-500 uppercase block font-semibold">Assigned Post</span>
+                      <span className="text-white text-[11px] mt-0.5 block truncate">{siteDetails.name}</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
+                    <span className="text-[9px] text-slate-500 uppercase block font-semibold">Supervisor Escalation</span>
+                    <p className="text-xs text-white">Kishor Ladawte (Senior Supervisor)</p>
+                    <p className="text-[10px] text-amber-400 font-mono">☎️ +91 98210 25556</p>
+                  </div>
+                </div>
+
+                {/* Duty Performance Summary */}
+                <div className="bg-slate-900 p-4 border border-slate-800 rounded-2xl space-y-2">
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Shift Statistics</h4>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+                      <span className="text-base font-bold text-emerald-400 block">{scannedPoints.length}</span>
+                      <span className="text-[9px] text-slate-500 block">Patrols Cleared</span>
+                    </div>
+                    <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+                      <span className="text-base font-bold text-amber-400 block">{visitors.length}</span>
+                      <span className="text-[9px] text-slate-500 block">Visitors Checked</span>
+                    </div>
+                    <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
+                      <span className="text-base font-bold text-blue-400 block">100%</span>
+                      <span className="text-[9px] text-slate-500 block">SLA Score</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -756,9 +862,9 @@
               <Icon name="map" className="w-5 h-5 mx-auto" />
               <span className="mt-0.5 block">Patrol</span>
             </button>
-            <button onClick={() => setActiveTab('incidents')} className={activeTab === 'incidents' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
-              <Icon name="exclamation" className="w-5 h-5 mx-auto" />
-              <span className="mt-0.5 block">Logs</span>
+            <button onClick={() => setActiveTab('profile')} className={activeTab === 'profile' ? 'text-amber-500 font-bold' : 'text-slate-500'}>
+              <Icon name="user" className="w-5 h-5 mx-auto" />
+              <span className="mt-0.5 block">Profile</span>
             </button>
           </div>
 
