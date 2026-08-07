@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Super Secure Pro - OST Security Services</title>
   
-  <!-- Mobile PWA Meta Tags (Hides Browser Address Bar when added to Home Screen) -->
+  <!-- Mobile PWA Meta Tags -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -22,7 +22,6 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   
   <style>
-    /* Prevent rubber-band scrolling for native app touch feel */
     html, body {
       overscroll-behavior-y: none;
       touch-action: manipulation;
@@ -55,13 +54,21 @@
     };
 
     function App() {
-      const [siteDetails, setSiteDetails] = useState({
-        name: 'Unicorn by Chandak',
-        type: '18 Storey Commercial Tower',
-        address: 'Chandak Unicorn Commercial Hub, Central District',
-        gates: '2 Gates (Gate 1 Main Entry, Gate 2 Service)',
-        helpline: '+91 98210 25556',
-        instructions: 'All visitors & contractors must register at Reception Gate 1. Photo verification & AI record check required.'
+      // Local Storage Loaders & Persistence
+      const [retentionDays, setRetentionDays] = useState(() => {
+        return localStorage.getItem('ost_retention') || '20';
+      });
+
+      const [siteDetails, setSiteDetails] = useState(() => {
+        const saved = localStorage.getItem('ost_siteDetails');
+        return saved ? JSON.parse(saved) : {
+          name: 'Unicorn by Chandak',
+          type: '18 Storey Commercial Tower',
+          address: 'Chandak Unicorn Commercial Hub, Central District',
+          gates: '2 Gates (Gate 1 Main Entry, Gate 2 Service)',
+          helpline: '+91 98210 25556',
+          instructions: 'All visitors & contractors must register at Reception Gate 1. Photo verification & AI record check required.'
+        };
       });
 
       const [users, setUsers] = useState([
@@ -101,36 +108,60 @@
       const [visitorPhone, setVisitorPhone] = useState('');
       const [isScanningPhoto, setIsScanningPhoto] = useState(false);
 
-      const [visitors, setVisitors] = useState([
-        { 
-          id: 'vis-1', 
-          name: 'Amit Patel', 
-          company: 'Amazon Delivery', 
-          host: 'Office 402', 
-          inTime: '01:45 PM', 
-          photo: '👨‍💼', 
-          policeCheck: 'CLEARED (No Criminal Record)',
-          statusColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-          hostApproval: 'APPROVED BY OFFICE',
-          hostApprovalColor: 'text-emerald-400 bg-emerald-950/60 border-emerald-500/30'
-        }
-      ]);
+      const [visitors, setVisitors] = useState(() => {
+        const saved = localStorage.getItem('ost_visitors');
+        return saved ? JSON.parse(saved) : [
+          { 
+            id: 'vis-1', 
+            name: 'Amit Patel', 
+            company: 'Amazon Delivery', 
+            host: 'Office 402', 
+            inTime: '01:45 PM', 
+            photo: '👨‍💼', 
+            policeCheck: 'CLEARED (No Criminal Record)',
+            statusColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+            hostApproval: 'APPROVED BY OFFICE',
+            hostApprovalColor: 'text-emerald-400 bg-emerald-950/60 border-emerald-500/30'
+          }
+        ];
+      });
 
       const [incidents] = useState([
         { id: 'inc-1', title: 'Basement Parking Light Defect', location: 'B2 Parking', reporter: 'Raju Sonekamble', severity: 'medium', time: '02:15 AM' },
         { id: 'inc-2', title: 'Unauthorized Parking Warning', location: 'Gate 2 Entrance', reporter: 'Ravi Khandare', severity: 'low', time: '11:30 AM' }
       ]);
 
+      // Essential Patrolling Duties as Checkpoints
       const checkpoints = [
-        'Main Reception Gate 1',
-        'Loading Dock Gate 2',
-        'Basement 1 Parking Grid',
-        'Server Room Level 4',
-        'High-Speed Elevator Lobby',
-        'Terrace & Refuge Area (18th Floor)'
+        'Gate 1 & Gate 2 Security Booth Check',
+        'Inspect Basement 1 & 2 Parking & Light Panels',
+        'Check Fire Extinguishers & Exit Stairwells',
+        'Inspect Water Pump Room & Electrical Substation',
+        'Verify Service Loading Dock & Material Gates',
+        'Inspect Refuge Areas & 18th Floor Terrace Door Lock'
       ];
 
-      const [scannedPoints, setScannedPoints] = useState([]);
+      const [scannedPoints, setScannedPoints] = useState(() => {
+        const saved = localStorage.getItem('ost_scannedPoints');
+        return saved ? JSON.parse(saved) : [];
+      });
+
+      // Save Data Effects
+      useEffect(() => {
+        localStorage.setItem('ost_siteDetails', JSON.stringify(siteDetails));
+      }, [siteDetails]);
+
+      useEffect(() => {
+        localStorage.setItem('ost_visitors', JSON.stringify(visitors));
+      }, [visitors]);
+
+      useEffect(() => {
+        localStorage.setItem('ost_scannedPoints', JSON.stringify(scannedPoints));
+      }, [scannedPoints]);
+
+      useEffect(() => {
+        localStorage.setItem('ost_retention', retentionDays);
+      }, [retentionDays]);
 
       const showNotify = (msg) => {
         setNotification(msg);
@@ -140,16 +171,17 @@
       const handleSaveSiteDetails = (e) => {
         e.preventDefault();
         setSiteDetails({ ...editSite });
-        showNotify("Site details updated successfully!");
+        showNotify(`Site details saved! Retention set to ${retentionDays} Days.`);
       };
 
       const handleScan = (pt) => {
         if (scannedPoints.includes(pt)) {
-          showNotify("Checkpoint already verified!");
+          showNotify("Patrol duty already verified!");
           return;
         }
-        setScannedPoints([...scannedPoints, pt]);
-        showNotify(`Scanned: ${pt}`);
+        const updated = [...scannedPoints, pt];
+        setScannedPoints(updated);
+        showNotify(`Duty Cleared: ${pt}`);
       };
 
       const handleAddPersonnel = (e) => {
@@ -223,7 +255,7 @@
         if (!visitorName || !visitorHost) return;
 
         setIsScanningPhoto(true);
-        showNotify("🔍 AI Facial Scan & Police DB Search in Progress...");
+        showNotify("🔍 Scanning Face & Requesting Office Verification...");
 
         setTimeout(() => {
           setIsScanningPhoto(false);
@@ -316,7 +348,7 @@
             </button>
           </div>
 
-          {/* Staff Switcher Modal Overlay */}
+          {/* Staff Switcher Modal */}
           {showStaffPicker && (
             <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 p-4 flex flex-col justify-end">
               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 max-h-[70vh] flex flex-col">
@@ -420,13 +452,30 @@
               </div>
             )}
 
-            {/* TAB 2: EDIT SITE DETAILS */}
+            {/* TAB 2: EDIT SITE & RETENTION SETTINGS */}
             {activeTab === 'site' && (
               <div className="space-y-3">
                 <form onSubmit={handleSaveSiteDetails} className="bg-slate-900 p-4 border border-slate-800 rounded-2xl space-y-3">
                   <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                    <h4 className="text-xs font-bold text-white uppercase tracking-wider">Update Property Details</h4>
+                    <h4 className="text-xs font-bold text-white uppercase tracking-wider">Property & Storage Config</h4>
                     <Icon name="building" className="w-4 h-4 text-amber-500" />
+                  </div>
+
+                  {/* Retention Setting */}
+                  <div className="space-y-1 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                    <label className="text-[10px] text-amber-400 uppercase font-bold block">Log Auto-Save Retention Period</label>
+                    <select 
+                      value={retentionDays} 
+                      onChange={(e) => setRetentionDays(e.target.value)}
+                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono mt-1"
+                    >
+                      <option value="10">10 Days Auto-Retention</option>
+                      <option value="20">20 Days Auto-Retention (Recommended for Mobile)</option>
+                      <option value="30">30 Days Auto-Retention (Monthly Audit)</option>
+                      <option value="60">60 Days Auto-Retention</option>
+                      <option value="90">90 Days Maximum Storage</option>
+                    </select>
+                    <p className="text-[9px] text-slate-400 mt-1">20-30 Days is ideal. Keeps device memory light while keeping monthly audits accessible.</p>
                   </div>
 
                   <div className="space-y-1">
@@ -487,13 +536,13 @@
                   </div>
 
                   <button type="submit" className="w-full bg-amber-500 text-slate-950 font-bold py-3 rounded-xl text-xs uppercase tracking-wider">
-                    Save Site Changes
+                    Save Config & Auto-Store Data
                   </button>
                 </form>
               </div>
             )}
 
-            {/* TAB 3: VISITORS (WITH OFFICE VERIFICATION & LIVE CAMERA) */}
+            {/* TAB 3: VISITORS */}
             {activeTab === 'visitors' && (
               <div className="space-y-4">
                 <form onSubmit={handleAddVisitor} className="bg-slate-900 p-4 border border-slate-800 rounded-2xl space-y-3 shadow-lg">
@@ -608,7 +657,6 @@
                           </span>
                         </div>
 
-                        {/* Office Intercom Approval Badge */}
                         <div className="flex items-center justify-between gap-2 pt-1">
                           <div className={`p-2 rounded-xl border text-[10px] font-mono flex-1 ${v.hostApprovalColor}`}>
                             <span>🏢 Office Check: </span>
@@ -623,7 +671,6 @@
                           </button>
                         </div>
 
-                        {/* AI Police DB Badge */}
                         <div className={`p-2 rounded-xl border text-[10px] font-mono flex items-center justify-between ${v.statusColor}`}>
                           <span>🛡️ Police Search:</span>
                           <span className="font-bold">{v.policeCheck}</span>
@@ -635,11 +682,11 @@
               </div>
             )}
 
-            {/* TAB 4: PATROL ROUTE */}
+            {/* TAB 4: BASIC PATROLLING DUTIES & CHECKPOINTS */}
             {activeTab === 'patrol' && (
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Patrol Checkpoints</h4>
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider">Patrolling Duties Checklist</h4>
                   <span className="text-xs text-slate-400 font-mono">{scannedPoints.length} / {checkpoints.length} Cleared</span>
                 </div>
 
@@ -650,11 +697,16 @@
                       <button
                         key={idx}
                         onClick={() => handleScan(pt)}
-                        className={`w-full p-3 rounded-2xl border text-left text-xs flex justify-between items-center transition ${
+                        className={`w-full p-3.5 rounded-2xl border text-left text-xs flex justify-between items-center transition ${
                           isDone ? 'bg-blue-950/40 border-blue-500/50 text-blue-300' : 'bg-slate-900 border-slate-800 text-slate-300'
                         }`}
                       >
-                        <span className="font-medium">{pt}</span>
+                        <div className="flex items-center gap-2.5">
+                          <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${isDone ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                            {isDone ? '✓' : idx + 1}
+                          </span>
+                          <span className="font-medium text-xs">{pt}</span>
+                        </div>
                         <span className={`text-[10px] px-2.5 py-1 rounded-lg font-mono ${isDone ? 'bg-blue-500 text-white' : 'bg-slate-950 text-slate-400'}`}>
                           {isDone ? 'VERIFIED' : 'TAP SCAN'}
                         </span>
